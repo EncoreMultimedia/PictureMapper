@@ -156,9 +156,8 @@ class Breakpoints extends Component {
                                   }}/>
     });
     return (
-
-      <div className="articles__container">
-        <div className="input-wrapper">
+      <div className="container">
+        <aside className="input-wrapper col col__left">
           <article className="queries">
             <Queries queries={this.props.queries} callbacks={{updateCompWidth: this.updateCompWidth.bind(this),
                                                               updateCompHeight: this.updateCompHeight.bind(this)}}/>
@@ -166,9 +165,9 @@ class Breakpoints extends Component {
           <article className="multipliers">
             <Multipliers key="multipliers" multipliers={this.props.multipliers} />
           </article>
-        </div>
-        <article className="breakpoints">
-          <div className="breakpoints-wrapper">
+        </aside>
+        <article className="breakpoints col col__right">
+          <div className="inner-wrapper">
             <h3>Breakpoints</h3>
             <table>
               <thead>
@@ -208,6 +207,9 @@ class Breakpoint extends Component {
           <BreakpointWidth key={this.props.width} id={this.props.id} width={this.props.width} updateWidth={this.props.callBacks.updateWidth} />
           <BreakpointHeight key={this.props.name+this.props.id} id={this.props.id} height={this.props.height} updateHeight={this.props.callBacks.updateHeight} />
           <BreakpointAspectRatio key={"aspectRatio"+this.props.id} id={this.props.id} aspectRatio={this.props.aspectRatio} updateAspectRatio={this.props.callBacks.updateAspectRatio} />
+        </tr>
+        <tr className="breakpoint-multipliers">
+          <th colSpan="4">Multipliers</th>
         </tr>
         {breakpointMultipliers}
       </tbody>
