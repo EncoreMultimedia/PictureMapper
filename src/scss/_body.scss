@@ -1,43 +1,84 @@
-
-.queries, .multipliers, .breakpoints {
-  background-color: aliceblue;
-  box-shadow: 0 0 15px #0152ab;
-  border-radius: 3px;
-  margin: 0 auto 15px;
-  @media (min-width: 760px) {
-
-    width: 224px;
-  }
-
-  h3 {
-    text-align: center;
-    margin: 0;
-    padding: 12px 0;
-  }
-}
-
-.breakpoints {
-  width: 600px;
-}
-
-.queries-wrapper, .multipliers-wrapper {
-  max-width: 190px;
+#root {
+  max-width: 1200px;
+  min-width: 600px;
+  padding: 20px;
   margin: 0 auto;
-}
+  color: #32333d;
 
-input, span {
-  width: 84px;
-}
+  > .container {
+    &:after {
+      content: " ";
+      display: block;
+      clear: both;
+    }
+  }
 
-.input-wrapper {
-  width: 32%;
-  float: left;
-  padding-bottom: 20px;
+  article {
+    background-color: #859eab;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
 
-  &:after {
-    content: "";
-    display: block;
-    clear: both;
+  .col {
+    box-sizing: border-box;
+
+    @media (min-width: 780px) {
+      float: left;
+
+      &.col__left {
+        width: 30%;
+      }
+
+      &.col__right {
+        width: 68%;
+        margin-left: 2%;
+      }
+    }
+  }
+
+  input, select {
+    box-sizing: border-box;
+    width: 100%;
+    background: rgba(255,255,255, .4);
+    border: 0;
+    border-bottom: 1px solid #7d7e8c;
+  }
+
+  table {
+    width: 100%;
+
+    th {
+      text-align: left;
+    }
+
+    td, th {
+      padding: 5px;
+    }
+  }
+
+  .breakpoints {
+    table {
+      th, td {
+        width: 25%;
+        padding: 8px;
+      }
+
+      tbody:nth-of-type(odd) {
+        background-color: #95adb9;
+      }
+
+      .breakpoint-multipliers {
+        font-size: 10px;
+        color: #3f5864;
+
+        &:last-child td {
+          padding-bottom: 8px;
+        }
+
+        th, td {
+          padding: 2px 8px;
+        }
+      }
+    }
   }
 }
-
