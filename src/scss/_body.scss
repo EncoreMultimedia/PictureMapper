@@ -13,8 +13,12 @@
     }
   }
 
+  h3 {
+    color: #fff;
+  }
+
   article {
-    background-color: #859eab;
+    background-color: #90a5b0;
     padding: 15px;
     margin-bottom: 20px;
   }
@@ -49,6 +53,7 @@
 
     th {
       text-align: left;
+      color: #fff;
     }
 
     td, th {
@@ -64,12 +69,10 @@
       }
 
       tbody:nth-of-type(odd) {
-        background-color: #95adb9;
+        background-color: #a9bcc5;
       }
 
       .breakpoint-multipliers {
-        font-size: 10px;
-        color: #3f5864;
 
         &:last-child td {
           padding-bottom: 8px;
@@ -77,6 +80,8 @@
 
         th, td {
           padding: 2px 8px;
+          color: #3f5864;
+          font-size: 10px;
         }
       }
     }
