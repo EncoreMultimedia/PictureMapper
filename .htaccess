@@ -1,2 +1,2 @@
 RewriteEngine On
-RewriteRule ^$ /build [L]
+RewriteRule ^(.*)$ /build/$1 [L]
