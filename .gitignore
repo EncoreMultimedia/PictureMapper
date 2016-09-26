@@ -8,11 +8,13 @@ coverage
 
 # production
 build
+src/app/*.css
+src/app/*.css.map
 
 # misc
 .DS_Store
 npm-debug.log
-
+.sass-cache
 
 # Created by https://www.gitignore.io/api/phpstorm
 
