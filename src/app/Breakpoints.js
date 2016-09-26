@@ -177,6 +177,9 @@ class Breakpoints extends Component {
                 </tr>
               </thead>
               {breakpoints}
+              <tbody>
+              <AddBreakpoints />
+              </tbody>
             </table>
           </div>
         </article>
@@ -222,6 +225,27 @@ Breakpoint.propTypes = {
   breakpointMultipliers: PropTypes.arrayOf(PropTypes.object).isRequired,
   callBacks: PropTypes.object
 };
+
+class AddBreakpoints extends Component {
+
+  onClickHandler(e) {
+    e.preventDefault();
+
+    console.log(e.target.value);
+  }
+
+  render() {
+
+    return (
+      <tr>
+        <td><input type="text" defaultValue={"name"}/></td>
+        <td><input type="text" defaultValue={"Width"}/></td>
+        <td><button onClick={this.onClickHandler}>+</button></td>
+      </tr>
+    );
+  }
+}
+
 
 class BreakpointName extends Component{
 
