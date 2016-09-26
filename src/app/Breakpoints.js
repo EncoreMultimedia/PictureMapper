@@ -155,10 +155,6 @@ class Breakpoints extends Component {
                                   updateAspectRatio: this.updateAspectRatio.bind(this)
                                   }}/>
     });
-
-    let multipliers = this.props.multipliers.map((multiplier)=> {
-      return <span>{multiplier.name}</span>
-    });
     return (
 
       <div className="articles__container">
@@ -174,10 +170,14 @@ class Breakpoints extends Component {
         <article className="breakpoints">
           <div className="breakpoints-wrapper">
             <h3>Breakpoints</h3>
-            <div className="breakpoints-headers">
-              <span>Name</span><span>Width</span><span>Height</span><span>A/R</span>{multipliers}
-                {breakpoints}
-            </div>
+            <table>
+              <thead>
+                <tr className="breakpoints-headers">
+                  <th>Name</th><th>Width</th><th>Height</th><th>A/R</th>
+                </tr>
+              </thead>
+              {breakpoints}
+            </table>
           </div>
         </article>
       </div>
@@ -202,13 +202,15 @@ class Breakpoint extends Component {
         return <BreakpointMultiplier key={breakpointMultiplier.id} id={breakpointMultiplier.id} breakpointMultiplier={breakpointMultiplier}/>
       });
     return (
-        <div className="breakpoint" key={this.props.name}>
+      <tbody>
+        <tr className="breakpoint" key={this.props.name}>
           <BreakpointName key={this.props.name} id={this.props.id} name={this.props.name} updateName={this.props.callBacks.updateName}/>
           <BreakpointWidth key={this.props.width} id={this.props.id} width={this.props.width} updateWidth={this.props.callBacks.updateWidth} />
           <BreakpointHeight key={this.props.name+this.props.id} id={this.props.id} height={this.props.height} updateHeight={this.props.callBacks.updateHeight} />
           <BreakpointAspectRatio key={"aspectRatio"+this.props.id} id={this.props.id} aspectRatio={this.props.aspectRatio} updateAspectRatio={this.props.callBacks.updateAspectRatio} />
-          {breakpointMultipliers}
-        </div>
+        </tr>
+        {breakpointMultipliers}
+      </tbody>
     );
   }
 }
@@ -230,9 +232,9 @@ class BreakpointName extends Component{
 
   render() {
     return (
-      <div className="item breakpoint-name">
+      <td className="item breakpoint-name">
         <input key={this.props.id} type="text" defaultValue={this.props.name} onBlur={this.setName.bind(this)}/>
-      </div>
+      </td>
     );
   }
 }
@@ -252,9 +254,9 @@ class BreakpointWidth extends Component {
 
   render() {
     return (
-      <div className="item height">
+      <td className="item height">
         <input key={this.props.id} type="text" defaultValue={this.props.width} onBlur={this.setWidth.bind(this)}/>
-      </div>
+      </td>
     );
   }
 }
@@ -274,9 +276,9 @@ class BreakpointHeight extends Component {
 
   render() {
     return (
-      <div className="item height">
+      <td className="item height">
         <span key={this.props.id} > {this.props.height} </span>
-      </div>
+      </td>
     );
   }
 }
@@ -290,9 +292,9 @@ class BreakpointAspectRatio extends Component {
 
   render() {
     return (
-      <div className="item aspect-ratio">
+      <td className="item aspect-ratio">
         <span key={this.props.id}>{this.props.aspectRatio}</span>
-      </div>
+      </td>
     );
   }
 }
@@ -307,10 +309,12 @@ class BreakpointMultiplier extends Component {
 
   render() {
     return (
-      <div className="item breakpoint-multipliers">
-        <span>{this.props.breakpointMultiplier.width}</span>
-        <span>{this.props.breakpointMultiplier.height}</span>
-      </div>
+      <tr className="breakpoint-multipliers">
+        <td>{this.props.breakpointMultiplier.name}</td>
+        <td>{this.props.breakpointMultiplier.width}</td>
+        <td>{this.props.breakpointMultiplier.height}</td>
+        <td></td>
+      </tr>
     );
   }
 

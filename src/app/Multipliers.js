@@ -40,12 +40,13 @@ class Multipliers extends Component {
         <h3>Multipliers</h3>
         <form action="">
           <table>
+            <thead>
+              <tr>
+                <th>Multiplier</th>
+                <th>Value</th>
+              </tr>
+            </thead>
             <tbody>
-
-            <tr>
-              <td>Multiplier</td>
-              <td>Value</td>
-            </tr>
               {multipliers}
             </tbody>
           </table>

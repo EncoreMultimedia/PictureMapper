@@ -25,12 +25,14 @@ class Queries extends Component {
       <div className="queries-wrapper">
         <h3>Comp Sizes</h3>
           <table>
+            <thead>
+              <tr>
+                <th>Width</th>
+                <th>Height</th>
+              </tr>
+            </thead>
             <tbody>
-            <tr>
-              <td>Width</td>
-              <td>Height</td>
-            </tr>
-            {queries}
+              {queries}
             </tbody>
           </table>
       </div>
