@@ -19,7 +19,7 @@ class Multipliers extends Component {
   }
 
   updateValue(id, value) {
-    this.props.multipliers[id].value = parseInt(value,10);
+    this.props.multipliers[id].value = parseFloat(value);
     this.setState(this.props);
   }
 
@@ -29,7 +29,7 @@ class Multipliers extends Component {
       return <Multiplier key={multiplier.id}
                          id={multiplier.id}
                           name={multiplier.name}
-                          value={multiplier.value}
+                          value={parseFloat(multiplier.value)}
                           callBacks={{updateName: this.updateName.bind(this),
                                       updateValue: this.updateValue.bind(this)}}/>
     });
@@ -47,6 +47,7 @@ class Multipliers extends Component {
             <tbody>
               {multipliers}
             </tbody>
+              <AddMultiplier onAddMultipliers={this.props.onAddMultipliers} />
           </table>
         </form>
       </div>
@@ -57,6 +58,7 @@ class Multipliers extends Component {
 
 Multipliers.propTypes = {
   multipliers : PropTypes.arrayOf(PropTypes.object),
+  onAddMultipliers: PropTypes.func,
 };
 
 export default Multipliers;
@@ -92,7 +94,7 @@ class Name extends Component  {
 
     return (
       <td className="multiplier-name">
-        <input type="text" key={this.props.id} defaultValue={this.props.name} onBlur={this.setName.bind(this)}/>
+        <input type="text" key={this.props.id} defaultValue={this.props.name} />
       </td>
     );
   }
@@ -125,4 +127,55 @@ Value.propTypes = {
   id: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
   updateValue: PropTypes.func
+};
+
+class AddMultiplier extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      error: ""
+    }
+  }
+
+  onFocusHandler(e) {
+    e.preventDefault();
+    this.setState({
+      error: "",
+    });
+  }
+
+  onClickHandler(e) {
+    e.preventDefault();
+
+    if(/\S/.test(name) ) {
+      let name = this.refs.name.value;
+      let value = this.refs.value.value;
+      this.refs.name.value = "";
+      this.refs.value.value = "";
+      this.props.onAddMultipliers(name, parseFloat(value));
+    } else {
+      this.setState({
+        error: "Slow down.....you need a name and value",
+      });
+    }
+  }
+
+  render() {
+
+    return (
+      <tbody>
+        <tr><td colSpan="2" style={{color: 'white',fontWeight: 'bold'}}>{this.state.error}</td></tr>
+        <tr>
+          <td><input type="text" ref="name" placeholder={"Name"} onFocus={this.onFocusHandler.bind(this)}/></td>
+          <td><input type="number" step="0.01" ref="value"placeholder={"value"}/></td>
+          <td><button onClick={this.onClickHandler.bind(this)}>+</button></td>
+        </tr>
+      </tbody>
+    );
+  }
+}
+
+AddMultiplier.propTypes = {
+  onAddMultipliers: PropTypes.func,
 };

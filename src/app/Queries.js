@@ -33,6 +33,7 @@ class Queries extends Component {
             </thead>
             <tbody>
               {queries}
+              <AddComp onAddComp={this.props.onAddComp} />
             </tbody>
           </table>
       </div>
@@ -42,7 +43,8 @@ class Queries extends Component {
 
 Queries.propTypes = {
   queries: PropTypes.arrayOf(PropTypes.object).isRequired,
-  callbacks: PropTypes.object
+  callbacks: PropTypes.object,
+  onAddComp: PropTypes.func
 };
 
 export default Queries;
@@ -76,7 +78,7 @@ class CompWidth extends Component {
   render() {
     return (
       <td className="queries-width">
-        <input type="text" key={this.props.id} defaultValue={this.props.width} onBlur={this.setWidth.bind(this)}/>
+        <input type="number" key={this.props.id} defaultValue={this.props.width} onBlur={this.setWidth.bind(this)}/>
       </td>
     );
   }
@@ -98,7 +100,7 @@ class CompHeight extends Component {
   render() {
     return (
       <td className="queries-height">
-        <input type="text" key={this.props.id} defaultValue={this.props.height} onBlur={this.setHeight.bind(this)}/>
+        <input type="number" key={this.props.id} defaultValue={this.props.height} onBlur={this.setHeight.bind(this)}/>
       </td>
     );
   }
@@ -108,4 +110,33 @@ CompHeight.propTypes = {
   id: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   updateHeight: PropTypes.func
+};
+
+class AddComp extends Component {
+
+  onClickHandler(e) {
+    e.preventDefault();
+    let height = this.refs.height.value;
+    let width = this.refs.width.value;
+    this.refs.height.value = "";
+    this.refs.width.value = "";
+    this.props.onAddComp(parseInt(height,10), parseInt(width,10));
+
+  }
+
+  render() {
+
+    return (
+
+      <tr>
+        <td><input type="number" ref="width" placeholder={"Width"} /></td>
+        <td><input type="number" ref="height" placeholder={"Height"} /></td>
+        <td><button onClick={this.onClickHandler.bind(this)}>+</button></td>
+      </tr>
+    );
+  }
+}
+
+AddComp.propTypes = {
+  onAddComp: PropTypes.func,
 };
