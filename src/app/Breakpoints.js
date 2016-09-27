@@ -13,6 +13,7 @@ class Breakpoints extends Component {
       breakpoints: this.props.breakpoints,
       multipliers: this.props.multipliers,
       queries: this.props.queries,
+      styleOptions: this.props.styleOptions,
       newBreakpointName: "",
       newBreakpointWidth: 0,
     };
@@ -127,6 +128,12 @@ class Breakpoints extends Component {
     this.setState({breakpoints: this.props.breakpoints});
   }
 
+  updateStyle(id, style) {
+    this.props.breakpoints[id].style = style;
+    this.setState(this.props);
+    console.log("fire");
+  }
+
   onAddBreakpoint(name,width) {
 
     let breakpoint = {
@@ -136,6 +143,7 @@ class Breakpoints extends Component {
       height: 0,
       aspectRatio: 0,
       multipliers: [this.state.multipliers],
+      style: 'focal_point_scale_and_crop',
     };
 
     this.props.breakpoints.push(breakpoint);
@@ -154,10 +162,13 @@ class Breakpoints extends Component {
                          height={breakpoint.height}
                          aspectRatio={breakpoint.aspectRatio}
                          breakpointMultipliers={breakpoint.multipliers}
+                         style={breakpoint.style}
+                         styleOptions={this.state.styleOptions}
                          callBacks={{updateName: this.updateName.bind(this),
                                   updateWidth: this.updateWidth.bind(this),
                                   updateHeight: this.updateHeight.bind(this),
-                                  updateAspectRatio: this.updateAspectRatio.bind(this)
+                                  updateAspectRatio: this.updateAspectRatio.bind(this),
+                                  updateStyle: this.updateStyle.bind(this)
                                   }}/>
     });
     return (
@@ -180,7 +191,7 @@ class Breakpoints extends Component {
             <table>
               <thead>
                 <tr className="breakpoints-headers">
-                  <th>Name</th><th>Width</th><th>Height</th><th>A/R</th>
+                  <th>Name</th><th>Width</th><th>Height</th><th>A/R</th><th>Style</th>
                 </tr>
               </thead>
               {breakpoints}
@@ -210,6 +221,7 @@ class Breakpoint extends Component {
       let breakpointMultipliers = this.props.breakpointMultipliers.map((breakpointMultiplier) => {
         return <BreakpointMultiplier key={breakpointMultiplier.id} id={breakpointMultiplier.id} breakpointMultiplier={breakpointMultiplier}/>
       });
+
     return (
       <tbody>
         <tr className="breakpoint" key={this.props.name}>
@@ -217,9 +229,12 @@ class Breakpoint extends Component {
           <BreakpointWidth key={this.props.width} id={this.props.id} width={this.props.width} updateWidth={this.props.callBacks.updateWidth} />
           <BreakpointHeight key={this.props.name+this.props.id} id={this.props.id} height={this.props.height} updateHeight={this.props.callBacks.updateHeight} />
           <BreakpointAspectRatio key={"aspectRatio"+this.props.id} id={this.props.id} aspectRatio={this.props.aspectRatio} updateAspectRatio={this.props.callBacks.updateAspectRatio} />
+          <td>
+            <BreakpointStyle key={"styleSelect"+this.props.id} id={this.props.id} styleOptions={this.props.styleOptions} updateStyle={this.props.callBacks.updateStyle} />
+          </td>
         </tr>
         <tr className="breakpoint-multipliers">
-          <th colSpan="4">Multipliers</th>
+          <th colSpan="5">Multipliers</th>
         </tr>
         {breakpointMultipliers}
       </tbody>
@@ -232,6 +247,8 @@ Breakpoint.propTypes = {
   name: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
   breakpointMultipliers: PropTypes.arrayOf(PropTypes.object).isRequired,
+  style: PropTypes.string,
+  styleOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
   callBacks: PropTypes.object
 };
 
@@ -368,7 +385,7 @@ class BreakpointMultiplier extends Component {
         <td>{this.props.breakpointMultiplier.name}</td>
         <td>{this.props.breakpointMultiplier.width}</td>
         <td>{this.props.breakpointMultiplier.height}</td>
-        <td></td>
+        <td colSpan="2"></td>
       </tr>
     );
   }
@@ -380,3 +397,31 @@ BreakpointMultiplier.propTypes = {
   breakpointMultiplier: PropTypes.object.isRequired,
 };
 
+
+class BreakpointStyle extends Component {
+
+  setStyle(e) {
+    e.preventDefault();
+    this.props.updateStyle(this.props.id, e.target.value)
+  }
+
+  render() {
+    let options = this.props.styleOptions.map((option) => {
+      return (
+        <option key={option.value+this.props.id} value={option.value}>{option.name}</option>
+        );
+    });
+    return (
+      <select onChange={this.setStyle.bind(this)}>
+        {options}
+      </select>
+    );
+  }
+
+}
+
+BreakpointStyle.propTypes = {
+  id: PropTypes.number.isRequired,
+  styleOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  updateStyle: PropTypes.func,
+};

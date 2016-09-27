@@ -11,6 +11,7 @@ let breakpoints = [
     height: 0,
     aspectRatio: 0,
     multipliers: [],
+    style: 'focal_point_scale_and_crop',
   },
   {
     id: 1,
@@ -19,6 +20,7 @@ let breakpoints = [
     height: 0,
     aspectRatio: 0,
     multipliers: [],
+    style: 'focal_point_scale_and_crop',
   },
   {
     id: 2,
@@ -27,6 +29,7 @@ let breakpoints = [
     height: 0,
     aspectRatio: 0,
     multipliers: [],
+    style: 'focal_point_scale_and_crop',
   },
   {
     id: 3,
@@ -35,6 +38,7 @@ let breakpoints = [
     height: 0,
     aspectRatio: 0,
     multipliers: [],
+    style: 'focal_point_scale_and_crop',
   },
   {
     id: 4,
@@ -43,6 +47,7 @@ let breakpoints = [
     height: 0,
     aspectRatio: 0,
     multipliers: [],
+    style: 'focal_point_scale_and_crop',
   },
   {
     id: 5,
@@ -51,6 +56,7 @@ let breakpoints = [
     height: 0,
     aspectRatio: 0,
     multipliers: [],
+    style: 'focal_point_scale_and_crop',
   },
   {
     id: 6,
@@ -59,6 +65,7 @@ let breakpoints = [
     height: 0,
     aspectRatio: 0,
     multipliers: [],
+    style: 'focal_point_scale_and_crop',
   },
 ];
 
@@ -77,7 +84,7 @@ let queries = [
     id: 2,
     name: 'Desktop',
     points: [1500,554],
-  }
+  },
 ];
 
 let multipliers = [
@@ -99,8 +106,30 @@ let multipliers = [
 
 ];
 
+let styleOptions = [
+
+
+  {
+    name: "Focal Point Scale and Crop",
+    value: "focal_point_scale_and_crop",
+  },
+  {
+    name: "Scale and Crop",
+    value: "scale_and_crop",
+  },
+  {
+    name: "Image Crop",
+    value: "image_crop",
+  },
+  {
+    name: "Image Resize",
+    value: "image_resize",
+  },
+
+];
+
 
 ReactDOM.render(
-  <Breakpoints breakpoints={breakpoints} queries={queries} multipliers={multipliers}/>,
+  <Breakpoints breakpoints={breakpoints} queries={queries} multipliers={multipliers} styleOptions={styleOptions}/>,
   document.getElementById('root')
 );

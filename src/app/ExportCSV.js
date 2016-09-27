@@ -8,13 +8,13 @@ class ExportCSV extends Component {
   fireDownload() {
     let breakpoints = this.props.breakpoints;
 
-    let csv = ['data:text/csv;charset=utf-8,'];
-    csv.push(['Breakpoint', 'Width', 'Height', 'Multiplier'].join(', '));
+    let csv = [];
+    csv.push('data:text/csv;charset=utf-8,' + ['Breakpoint', 'Width', 'Height', 'Multiplier', 'Style'].join(', '));
 
     breakpoints.forEach(function(breakpoint) {
-      csv.push([breakpoint.name, breakpoint.width, breakpoint.height, 1].join(', '));
+      csv.push([breakpoint.name, breakpoint.width, breakpoint.height, 1, breakpoint.style].join(', '));
       breakpoint.multipliers.forEach(function(multiplier) {
-        csv.push([breakpoint.name, multiplier.width, multiplier.height, multiplier.name].join(', '));
+        csv.push([breakpoint.name, multiplier.width, multiplier.height, multiplier.name, breakpoint.style].join(', '));
       });
     });
 
