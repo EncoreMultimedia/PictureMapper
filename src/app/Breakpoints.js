@@ -1,4 +1,5 @@
 import React,{Component, PropTypes} from 'react';
+import _  from 'lodash';
 import Queries from './Queries';
 import Multipliers from './Multipliers';
 import './App.css';
@@ -112,22 +113,17 @@ class Breakpoints extends Component {
   }
 
   updateBreakpointMultipliers() {
-    for (let i=0; i < this.props.breakpoints.length; i++) {
-      this.props.breakpoints[i].multipliers = this.state.multipliers;
-      for (let j = 0; j <this.props.breakpoints[i].multipliers.length; j++) {
-        var width =this.props.breakpoints[i].multipliers[j].value * this.props.breakpoints[i].width;
-        var height = this.props.breakpoints[i].multipliers[j].value * this.props.breakpoints[i].height;
-
-        console.log(width + " " + height);
+    for (let i = 0; i < this.props.breakpoints.length; i++) {
+      this.props.breakpoints[i].multipliers = _.cloneDeep(this.state.multipliers);
+      for (let j = 0; j < this.props.multipliers.length; j++) {
+        let width = this.props.breakpoints[i].multipliers[j].value * this.props.breakpoints[i].width;
+        let height = this.props.breakpoints[i].multipliers[j].value * this.props.breakpoints[i].height;
 
         this.props.breakpoints[i].multipliers[j].width = width;
         this.props.breakpoints[i].multipliers[j].height = height;
-        console.log(this.props.breakpoints[i].multipliers);
-        this.setState({breakpoints: this.props.breakpoints})
       }
-
     }
-
+    this.setState({breakpoints: this.props.breakpoints});
   }
 
   onAddBreakpoint(name,width) {
