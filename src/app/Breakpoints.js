@@ -11,19 +11,18 @@ class Breakpoints extends Component {
       breakpoints: this.props.breakpoints,
       multipliers: this.props.multipliers,
       queries: this.props.queries,
+      newBreakpointName: "",
+      newBreakpointWidth: 0,
     };
+
     this.counter = 7;
   }
 
   componentWillMount() {
     this.breakpointHandler();
-    this.updateBreakpointMultipliers();
+    //this.updateBreakpointMultipliers();
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.props = nextProps;
-    this.breakpointHandler();
-  }
   // sort from least to greatest
   sortPoints(points) {
     return points.sort(function(a,b) {
@@ -43,6 +42,8 @@ class Breakpoints extends Component {
     for(var i=0; i<this.props.breakpoints.length; i++) {
        this.setBreakpointHeight(i,points,this.props.breakpoints[i].width);
     }
+
+    this.updateBreakpointMultipliers();
   }
   // check where a breakpoint width is within a given coordinates driven by the queries entered in.
   setBreakpointHeight(index,points,width) {
@@ -111,33 +112,40 @@ class Breakpoints extends Component {
   }
 
   updateBreakpointMultipliers() {
-    for (let i = 0; i < this.props.breakpoints.length; i++) {
-      this.props.breakpoints[i].multipliers = this.props.multipliers;
-      for (let j = 0; j < this.props.breakpoints[i].multipliers.length; j++) {
-        let value = this.props.breakpoints[i].multipliers[j].value;
-        let width = this.props.breakpoints[i].width;
-        let height = this.props.breakpoints[i].height;
-        this.props.breakpoints[i].multipliers[j].width = parseInt(value * width,10);
-        this.props.breakpoints[i].multipliers[j].height = parseInt(value * height,10);
+    for (let i=0; i < this.props.breakpoints.length; i++) {
+      this.props.breakpoints[i].multipliers = this.state.multipliers;
+      for (let j = 0; j <this.props.breakpoints[i].multipliers.length; j++) {
+        var width =this.props.breakpoints[i].multipliers[j].value * this.props.breakpoints[i].width;
+        var height = this.props.breakpoints[i].multipliers[j].value * this.props.breakpoints[i].height;
+
+        console.log(width + " " + height);
+
+        this.props.breakpoints[i].multipliers[j].width = width;
+        this.props.breakpoints[i].multipliers[j].height = height;
+        console.log(this.props.breakpoints[i].multipliers);
+        this.setState({breakpoints: this.props.breakpoints})
       }
+
     }
+
   }
 
-  onAdd(e) {
-    e.preventDefault();
+  onAddBreakpoint(name,width) {
 
     let breakpoint = {
       id: this.counter,
-      name: this.refs.name.value,
-      width: parseInt(this.refs.name.value,10),
+      name: name,
+      width: parseInt(width,10),
       height: 0,
       aspectRatio: 0,
+      multipliers: [this.state.multipliers],
     };
 
     this.props.breakpoints.push(breakpoint);
-    this.setState(this.props);
+    this.setState({breakpoints: this.props.breakpoints});
     this.counter += 1;
-    console.log("onAdd: "+ breakpoint);
+    console.log("onAdd: "+ this.props.breakpoints);
+    this.breakpointHandler();
   }
 
   render(){
@@ -177,7 +185,7 @@ class Breakpoints extends Component {
               </thead>
               {breakpoints}
               <tbody>
-              <AddBreakpoints />
+              <AddBreakpoints name={this.state.newBreakpointName} width={this.state.newBreakpointWidth} onAddBreakpoint={this.onAddBreakpoint.bind(this)}/>
               </tbody>
             </table>
           </div>
@@ -199,7 +207,6 @@ export default Breakpoints;
 class Breakpoint extends Component {
 
   render() {
-      console.log(this.props.breakpointMultipliers);
       let breakpointMultipliers = this.props.breakpointMultipliers.map((breakpointMultiplier) => {
         return <BreakpointMultiplier key={breakpointMultiplier.id} id={breakpointMultiplier.id} breakpointMultiplier={breakpointMultiplier}/>
       });
@@ -230,24 +237,46 @@ Breakpoint.propTypes = {
 
 class AddBreakpoints extends Component {
 
+  constructor() {
+    super(...arguments);
+    this.state =({
+      name: this.props.name,
+      width: this.props.width
+    });
+  }
+
+  nameChangeHandler(e) {
+    e.preventDefault();
+    this.setState({name:e.target.value});
+  }
+
+  widthChangeHandler(e) {
+    e.preventDefault();
+    this.setState({width: e.target.value});
+  }
+
   onClickHandler(e) {
     e.preventDefault();
-
-    console.log(e.target.value);
+    this.props.onAddBreakpoint(this.state.name, this.state.width);
   }
 
   render() {
 
     return (
       <tr>
-        <td><input type="text" defaultValue={"name"}/></td>
-        <td><input type="text" defaultValue={"Width"}/></td>
-        <td><button onClick={this.onClickHandler}>+</button></td>
+        <td><input type="text" placeholder={"Name"} onBlur={this.nameChangeHandler.bind(this)}/></td>
+        <td><input type="text" placeholder={"Width"} onBlur={this.widthChangeHandler.bind(this)}/></td>
+        <td><button onClick={this.onClickHandler.bind(this)}>+</button></td>
       </tr>
     );
   }
 }
 
+AddBreakpoints.propTypes = {
+  onAddBreakpoint: PropTypes.func,
+  name: PropTypes.string.isRequired,
+  width: PropTypes.number.isRequired,
+};
 
 class BreakpointName extends Component{
 

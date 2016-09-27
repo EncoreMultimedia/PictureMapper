@@ -16,13 +16,11 @@ class Multipliers extends Component {
   updateName(id, name) {
     this.props.multipliers[id].name = name;
     this.setState(this.props);
-    console.log(this.props.multipliers[id]);
   }
 
   updateValue(id, value) {
     this.props.multipliers[id].value = parseInt(value,10);
     this.setState(this.props);
-    console.log(this.props.multipliers[id]);
   }
 
 
