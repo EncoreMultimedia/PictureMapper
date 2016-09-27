@@ -1,4 +1,5 @@
 RewriteEngine On
 RewriteBase /
 RewriteCond %{REQUEST_URI} !^/build/
+RewriteCond %{REQUEST_URI} !^/php/
 RewriteRule ^(.*)$ /build/$1 [L]
