@@ -2,6 +2,7 @@ import React,{Component, PropTypes} from 'react';
 import _  from 'lodash';
 import Queries from './Queries';
 import Multipliers from './Multipliers';
+import ExportCSV from './ExportCSV';
 import './App.css';
 
 class Breakpoints extends Component {
@@ -168,6 +169,9 @@ class Breakpoints extends Component {
           </article>
           <article className="multipliers">
             <Multipliers key="multipliers" multipliers={this.props.multipliers} />
+          </article>
+          <article className="export">
+            <ExportCSV breakpoints={this.state.breakpoints} />
           </article>
         </aside>
         <article className="breakpoints col col__right">
