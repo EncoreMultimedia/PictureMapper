@@ -19,11 +19,12 @@ class Breakpoints extends Component {
     };
 
     this.counter = 7;
+    this.multipliersCounter = 2;
+    this.compCounter = 3;
   }
 
   componentWillMount() {
     this.breakpointHandler();
-    //this.updateBreakpointMultipliers();
   }
 
   // sort from least to greatest
@@ -147,9 +148,45 @@ class Breakpoints extends Component {
     };
 
     this.props.breakpoints.push(breakpoint);
+
+    this.props.breakpoints.sort(function(a,b){
+      return ( a.width - b.width);
+    });
     this.setState({breakpoints: this.props.breakpoints});
     this.counter += 1;
-    console.log("onAdd: "+ this.props.breakpoints);
+    this.breakpointHandler();
+  }
+
+  onAddMultipliers(name, value) {
+    let multiplier = {
+      id: this.multipliersCounter,
+      name: name,
+      value: parseFloat(value),
+      width: 0,
+      height: 0,
+    };
+    this.props.multipliers.push(multiplier);
+    this.props.multipliers.sort(function(a,b){
+      return (a.value - b.value);
+    });
+    this.multipliersCounter += 1;
+    this.setState({multipliers: this.props.multipliers});
+    console.log(this.state.multipliers[2].value);
+    this.breakpointHandler();
+  }
+
+  onAddComp(width, height) {
+    let comp = {
+      id: this.compCounter,
+      name: this.compCounter+"comp",
+      points: [width,height],
+    };
+    this.props.queries.push(comp);
+    this.props.queries.sort(function(a,b){
+      return (a.points[0] - b.points[0]);
+    });
+    this.compCounter += 1;
+    this.setState({queries: this.props.queries});
     this.breakpointHandler();
   }
 
@@ -175,11 +212,11 @@ class Breakpoints extends Component {
       <div className="container">
         <aside className="input-wrapper col col__left">
           <article className="queries">
-            <Queries queries={this.props.queries} callbacks={{updateCompWidth: this.updateCompWidth.bind(this),
+            <Queries queries={this.props.queries} onAddComp={this.onAddComp.bind(this)} callbacks={{updateCompWidth: this.updateCompWidth.bind(this),
                                                               updateCompHeight: this.updateCompHeight.bind(this)}}/>
           </article>
           <article className="multipliers">
-            <Multipliers key="multipliers" multipliers={this.props.multipliers} />
+            <Multipliers key="multipliers" multipliers={this.props.multipliers} onAddMultipliers={this.onAddMultipliers.bind(this)} />
           </article>
           <article className="export">
             <ExportCSV breakpoints={this.state.breakpoints} />
@@ -195,9 +232,7 @@ class Breakpoints extends Component {
                 </tr>
               </thead>
               {breakpoints}
-              <tbody>
-              <AddBreakpoints name={this.state.newBreakpointName} width={this.state.newBreakpointWidth} onAddBreakpoint={this.onAddBreakpoint.bind(this)}/>
-              </tbody>
+              <AddBreakpoints onAddBreakpoint={this.onAddBreakpoint.bind(this)}/>
             </table>
           </div>
         </article>
@@ -254,45 +289,56 @@ Breakpoint.propTypes = {
 
 class AddBreakpoints extends Component {
 
-  constructor() {
-    super(...arguments);
-    this.state =({
-      name: this.props.name,
-      width: this.props.width
-    });
+  constructor(props) {
+    super(props);
+    this.state = {
+      error: "",
+    }
   }
 
-  nameChangeHandler(e) {
+  onFocusHandler(e) {
     e.preventDefault();
-    this.setState({name:e.target.value});
-  }
-
-  widthChangeHandler(e) {
-    e.preventDefault();
-    this.setState({width: e.target.value});
+    this.setState({error: ""});
   }
 
   onClickHandler(e) {
     e.preventDefault();
-    this.props.onAddBreakpoint(this.state.name, this.state.width);
+    let name = this.refs.name.value;
+    let width = this.refs.width.value;
+
+
+    if(/\S/.test(name) ) {
+      this.refs.name.value = "";
+      this.refs.width.value = "";
+      this.props.onAddBreakpoint(name, parseInt(width,10));
+    }else {
+      this.setState({
+        error: 'Slow down! need to add a Name and Width'
+      });
+    }
+
+
   }
 
   render() {
 
     return (
-      <tr>
-        <td><input type="text" placeholder={"Name"} onBlur={this.nameChangeHandler.bind(this)}/></td>
-        <td><input type="text" placeholder={"Width"} onBlur={this.widthChangeHandler.bind(this)}/></td>
-        <td><button onClick={this.onClickHandler.bind(this)}>+</button></td>
-      </tr>
+      <tbody>
+        <tr>
+          <td colSpan="3"><span style={{color: 'white', fontWeight: 'bold'}}>{this.state.error}</span></td>
+        </tr>
+        <tr>
+          <td><input type="text" ref="name" placeholder={"Name"} onFocus={this.onFocusHandler.bind(this)} required/></td>
+          <td><input type="number" ref="width"placeholder={"Width"} required/></td>
+          <td><button onClick={this.onClickHandler.bind(this)}>+</button></td>
+        </tr>
+      </tbody>
     );
   }
 }
 
 AddBreakpoints.propTypes = {
   onAddBreakpoint: PropTypes.func,
-  name: PropTypes.string.isRequired,
-  width: PropTypes.number.isRequired,
 };
 
 class BreakpointName extends Component{

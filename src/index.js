@@ -91,14 +91,14 @@ let multipliers = [
 
   {
     id: 0,
-    name: "1.5x",
+    name: "2",
     value: 1.5,
     width: 0,
     height: 0,
   },
   {
     id: 1,
-    name: "2x",
+    name: "2.5",
     value: 2,
     width: 0,
     height: 0,
