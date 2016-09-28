@@ -19,6 +19,7 @@ class Queries extends Component {
                     callbacks={{
                       updateCompWidth: this.props.callbacks.updateCompWidth,
                       updateCompHeight: this.props.callbacks.updateCompHeight,
+                      removeComp: this.props.callbacks.removeComp,
                     }}/>
     });
     return (
@@ -33,8 +34,8 @@ class Queries extends Component {
             </thead>
             <tbody>
               {queries}
-              <AddComp onAddComp={this.props.onAddComp} />
             </tbody>
+            <AddComp onAddComp={this.props.onAddComp} />
           </table>
       </div>
     );
@@ -56,6 +57,7 @@ class Query extends Component {
       <tr>
         <CompWidth key={this.props.id} id={this.props.id} width={this.props.width} updateWidth={this.props.callbacks.updateCompWidth} />
         <CompHeight key={this.props.height} id={this.props.id} height={this.props.height} updateHeight={this.props.callbacks.updateCompHeight} />
+        <CompRemove key={"remove"+this.props.id} id={this.props.id} removeComp={this.props.callbacks.removeComp} />
       </tr>
     )
   }
@@ -114,29 +116,67 @@ CompHeight.propTypes = {
 
 class AddComp extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      error: "",
+    }
+  }
+
+  onFocusHandler(e) {
+    e.preventDefault();
+    this.setState({error:""})
+  }
+
   onClickHandler(e) {
     e.preventDefault();
     let height = this.refs.height.value;
     let width = this.refs.width.value;
-    this.refs.height.value = "";
-    this.refs.width.value = "";
-    this.props.onAddComp(parseInt(height,10), parseInt(width,10));
-
+    if(/\S/.test(height) && (/\S/.test(width))){
+      this.refs.height.value = "";
+      this.refs.width.value = "";
+      this.props.onAddComp(parseInt(height,10), parseInt(width,10));
+    }else {
+     this.setState({
+       error: "Take a deep breath and add both height and width"
+     })
+    }
   }
 
   render() {
 
     return (
-
-      <tr>
-        <td><input type="number" ref="width" placeholder={"Width"} /></td>
-        <td><input type="number" ref="height" placeholder={"Height"} /></td>
-        <td><button onClick={this.onClickHandler.bind(this)}>+</button></td>
-      </tr>
+      <tbody>
+        <tr><td colSpan="2" style={{color: 'white', fontWeight:'bold'}}>{this.state.error}</td></tr>
+        <tr>
+          <td><input type="number" ref="width" placeholder={"Width"} onFocus={this.onFocusHandler.bind(this)} /></td>
+          <td><input type="number" ref="height" placeholder={"Height"} onFocus={this.onFocusHandler.bind(this)} /></td>
+          <td><button onClick={this.onClickHandler.bind(this)}>+</button></td>
+        </tr>
+      </tbody>
     );
   }
 }
 
 AddComp.propTypes = {
   onAddComp: PropTypes.func,
+};
+
+class CompRemove extends Component {
+
+  removeComp(e) {
+    e.preventDefault();
+    this.props.removeComp(this.props.id);
+  }
+
+  render() {
+    return (
+      <td><button onClick={this.removeComp.bind(this)}>x</button></td>
+    );
+  }
+}
+
+CompRemove.propTypes = {
+  id: PropTypes.number.isRequired,
+  removeComp: PropTypes.func
 };

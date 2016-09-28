@@ -31,7 +31,9 @@ class Multipliers extends Component {
                           name={multiplier.name}
                           value={parseFloat(multiplier.value)}
                           callBacks={{updateName: this.updateName.bind(this),
-                                      updateValue: this.updateValue.bind(this)}}/>
+                                      updateValue: this.updateValue.bind(this),
+                                      removeMultiplier: this.props.removeMultiplier,
+                                      }}/>
     });
     return (
       <div className="multipliers-wrapper">
@@ -59,6 +61,7 @@ class Multipliers extends Component {
 Multipliers.propTypes = {
   multipliers : PropTypes.arrayOf(PropTypes.object),
   onAddMultipliers: PropTypes.func,
+  removeMultiplier: PropTypes.func
 };
 
 export default Multipliers;
@@ -71,6 +74,7 @@ class Multiplier extends Component {
       <tr key={this.props.name}>
         <Name key={this.props.name} id={this.props.id} name={this.props.name} updateName={this.props.callBacks.updateName}  />
         <Value key={this.props.id} id={this.props.id} value={this.props.value} updateValue={this.props.callBacks.updateValue} />
+        <RemoveMultiplier key={"remove"+this.props.id} id={this.props.id} removeMultiplier={this.props.callBacks.removeMultiplier} />
       </tr>
     );
   }
@@ -148,9 +152,10 @@ class AddMultiplier extends Component {
   onClickHandler(e) {
     e.preventDefault();
 
+    let name = this.refs.name.value;
+    let value = this.refs.value.value;
+
     if(/\S/.test(name) ) {
-      let name = this.refs.name.value;
-      let value = this.refs.value.value;
       this.refs.name.value = "";
       this.refs.value.value = "";
       this.props.onAddMultipliers(name, parseFloat(value));
@@ -178,4 +183,25 @@ class AddMultiplier extends Component {
 
 AddMultiplier.propTypes = {
   onAddMultipliers: PropTypes.func,
+};
+
+class RemoveMultiplier extends Component {
+
+  removeMultiplier(e) {
+    e.preventDefault();
+
+    this.props.removeMultiplier(this.props.id);
+
+  }
+
+  render() {
+    return (
+      <td><button onClick={this.removeMultiplier.bind(this)}>x</button></td>
+    );
+  }
+}
+
+RemoveMultiplier.propTypes = {
+  id: PropTypes.number.isRequired,
+  removeMultiplier: PropTypes.func
 };

@@ -115,6 +115,37 @@ class Breakpoints extends Component {
     this.breakpointHandler();
   }
 
+  removeComp(id) {
+    for (let i = 0; i < this.props.queries.length; i++) {
+      if (this.props.queries[i].id === id) {
+        this.props.queries.splice(i,1);
+        this.setState({queries: this.props.queries});
+        break;
+      }
+    }
+  }
+
+  removeMultiplier(id) {
+    for (let i = 0; i < this.props.multipliers.length; i++) {
+      if (this.props.multipliers[i].id === id) {
+        this.props.multipliers.splice(i,1);
+        this.setState({multipliers: this.props.multipliers});
+        break;
+      }
+    }
+  }
+
+  removeBreakpoint(id) {
+    for (let i = 0; i < this.props.breakpoints.length; i++) {
+      if (this.props.breakpoints[i].id === id) {
+        this.props.breakpoints.splice(i,1);
+        this.setState({breakpoints: this.props.breakpoints});
+        break;
+      }
+    }
+  }
+
+
   updateBreakpointMultipliers() {
     for (let i = 0; i < this.props.breakpoints.length; i++) {
       this.props.breakpoints[i].multipliers = _.cloneDeep(this.state.multipliers);
@@ -132,7 +163,6 @@ class Breakpoints extends Component {
   updateStyle(id, style) {
     this.props.breakpoints[id].style = style;
     this.setState(this.props);
-    console.log("fire");
   }
 
   onAddBreakpoint(name,width) {
@@ -171,7 +201,6 @@ class Breakpoints extends Component {
     });
     this.multipliersCounter += 1;
     this.setState({multipliers: this.props.multipliers});
-    console.log(this.state.multipliers[2].value);
     this.breakpointHandler();
   }
 
@@ -205,7 +234,8 @@ class Breakpoints extends Component {
                                   updateWidth: this.updateWidth.bind(this),
                                   updateHeight: this.updateHeight.bind(this),
                                   updateAspectRatio: this.updateAspectRatio.bind(this),
-                                  updateStyle: this.updateStyle.bind(this)
+                                  updateStyle: this.updateStyle.bind(this),
+                                  removeBreakpoint: this.removeBreakpoint.bind(this),
                                   }}/>
     });
     return (
@@ -213,10 +243,11 @@ class Breakpoints extends Component {
         <aside className="input-wrapper col col__left">
           <article className="queries">
             <Queries queries={this.props.queries} onAddComp={this.onAddComp.bind(this)} callbacks={{updateCompWidth: this.updateCompWidth.bind(this),
-                                                              updateCompHeight: this.updateCompHeight.bind(this)}}/>
+                          updateCompHeight: this.updateCompHeight.bind(this),
+                          removeComp: this.removeComp.bind(this)}}/>
           </article>
           <article className="multipliers">
-            <Multipliers key="multipliers" multipliers={this.props.multipliers} onAddMultipliers={this.onAddMultipliers.bind(this)} />
+            <Multipliers key="multipliers" multipliers={this.props.multipliers} onAddMultipliers={this.onAddMultipliers.bind(this)} removeMultiplier={this.removeMultiplier.bind(this)}/>
           </article>
           <article className="export">
             <ExportCSV breakpoints={this.state.breakpoints} />
@@ -267,9 +298,12 @@ class Breakpoint extends Component {
           <td>
             <BreakpointStyle key={"styleSelect"+this.props.id} id={this.props.id} styleOptions={this.props.styleOptions} updateStyle={this.props.callBacks.updateStyle} />
           </td>
+
+          <RemoveBreakpoint key={"remove"+this.props.id} id={this.props.id} removeBreakpoint={this.props.callBacks.removeBreakpoint} />
+
         </tr>
         <tr className="breakpoint-multipliers">
-          <th colSpan="5">Multipliers</th>
+          <th colSpan="6">Multipliers</th>
         </tr>
         {breakpointMultipliers}
       </tbody>
@@ -431,7 +465,7 @@ class BreakpointMultiplier extends Component {
         <td>{this.props.breakpointMultiplier.name}</td>
         <td>{this.props.breakpointMultiplier.width}</td>
         <td>{this.props.breakpointMultiplier.height}</td>
-        <td colSpan="2"></td>
+        <td colSpan="3"></td>
       </tr>
     );
   }
@@ -470,4 +504,23 @@ BreakpointStyle.propTypes = {
   id: PropTypes.number.isRequired,
   styleOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
   updateStyle: PropTypes.func,
+};
+
+class RemoveBreakpoint extends Component {
+
+  removeBreakpoint(e) {
+    e.preventDefault();
+    this.props.removeBreakpoint(this.props.id);
+  }
+
+  render() {
+    return (
+      <td><button onClick={this.removeBreakpoint.bind(this)}>x</button></td>
+    );
+  }
+}
+
+RemoveBreakpoint.propTypes = {
+  id: PropTypes.number.isRequired,
+  removeBreakpoint: PropTypes.func
 };
