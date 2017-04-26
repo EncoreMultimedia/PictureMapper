@@ -110,16 +110,19 @@ const imageSizes = [
     id: 0,
     points: [320,181],
     breakpoint: 'yoda',
+    size: '100vw',
   },
   {
     id: 1,
     points: [600,338],
     breakpoint: 'luke',
+    size: '100vw',
   },
   {
     id: 2,
     points: [1500,554],
     breakpoint: 'atat',
+    size: '100vw',
   },
 ];
 

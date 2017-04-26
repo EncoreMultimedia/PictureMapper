@@ -62,7 +62,7 @@ export default class SystemTable extends Component {
                                   <td>{rowData.points[0]}</td>
                                   <td>{rowData.points[1]}</td>
                                   <td><select onChange={(e)=>this.onChangeList(e, rowData.id)} value={rowData.breakpoint ? rowData.breakpoint : ''}>{list}</select></td>
-                                  {this.state.radioImageValue ? <td><input type="text"/></td> : null}
+                                  {this.state.radioImageValue ? <td><input type="text" onChange={(e)=>this.calcChange(e, rowData.id)} defaultValue={rowData.size} /></td> : null}
                                 </tr>
       );
     });
@@ -95,8 +95,12 @@ export default class SystemTable extends Component {
     });
   }
 
+  calcChange(e, rowDataID) {
+    this.props.callbacks.calcChange(rowDataID, e.target.value);
+  }
+
   onChangeList(e, rowDataID) {
-    this.props.callbacks(rowDataID, e.target.value);
+    this.props.callbacks.breakpointChange(rowDataID, e.target.value);
   }
 
   buildMultipliers(tableValues) {
@@ -134,5 +138,5 @@ export default class SystemTable extends Component {
 SystemTable.propTypes = {
   tableValue: PropTypes.arrayOf(PropTypes.object),
   breakpointList: PropTypes.array,
-  callbacks: PropTypes.func,
+  callbacks: PropTypes.objectOf(PropTypes.func),
 };

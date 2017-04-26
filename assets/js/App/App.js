@@ -46,6 +46,13 @@ export default class App extends Component {
     this.setState({imageSizes: imageSizes});
     this.setImageSize();
   }
+
+  onChangeCalculation(id, value) {
+    let imageSizes = this.state.imageSizes;
+    imageSizes[id +1].size = value.toString();
+    this.setState({imageSizes: imageSizes});
+  }
+
   /**
    * this.setImageSize()
    * This method when called uses a hierarchy system that is implemented by imageSize properties and association with
@@ -143,7 +150,7 @@ export default class App extends Component {
     return (
       <article id="main" className="main">
         <div className="row">
-          <Settings  breakpoints={this.state.breakpoints} imageSizes={this.state.imageSizes} multipliers={this.state.multipliers} breakpointList={this.state.breakpointList} callbacks={this.onChangeImageSelectBreakpoint.bind(this)}/>
+          <Settings  breakpoints={this.state.breakpoints} imageSizes={this.state.imageSizes} multipliers={this.state.multipliers} breakpointList={this.state.breakpointList} callbacks={{breakpointChange: this.onChangeImageSelectBreakpoint.bind(this), calcChange: this.onChangeCalculation.bind(this)}}/>
           <OutputTable breakpoints={this.state.breakpoints} multipliers={this.state.multipliers} />
         </div>
       </article>
