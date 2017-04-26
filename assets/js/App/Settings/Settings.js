@@ -23,7 +23,7 @@ export default class Settings extends Component{
 
   render() {
     return (
-      <section className="settings small-12 medium-6 large-4 columns">
+      <section className="settings small-12 medium-6 large-5 columns">
         <HelpCenter/>
         <div className="setting-wrapper">
           <div className="setting-button-wrapper">

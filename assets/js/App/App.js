@@ -121,7 +121,6 @@ export default class App extends Component {
         let k = stopPoint[i];
         let j = stopPoint[i + 1];
         while ( k !== j) {
-          //console.log(imageSize[i + 1]);
           for(let m = 0; m < this.state.breakpointList.length; m++) {
             if(this.state.breakpointList[m].toLowerCase() === imageSize[i + 1].breakpoint) {
               containerWidth = breakpoints[m + 1].width;

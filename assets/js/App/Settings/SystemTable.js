@@ -40,8 +40,8 @@ export default class SystemTable extends Component {
     // add the table headings
     const tableHeadings = (
       <tr>
-        <th>{tableValues[0].header[1]}</th>
-        <th>{tableValues[0].header[2]}</th>
+        <th width='25'>{tableValues[0].header[1]}</th>
+        <th >{tableValues[0].header[2]}</th>
         <th>{tableValues[0].header[3]}</th>
         <th>Breakpoint</th>
         {this.props.calculationMode === 'calculation' ? <th>Calc</th> : null}

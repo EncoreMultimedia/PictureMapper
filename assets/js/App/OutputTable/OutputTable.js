@@ -32,7 +32,7 @@ export default class OutputTable extends Component{
     });
 
     return (
-      <section className="small-12 medium-6 large-8 columns">
+      <section className="small-12 medium-6 large-7 columns">
         <table>
           <caption>Breakpoint Output</caption>
           <thead>
