@@ -1,0 +1,41 @@
+.help-center {
+  border: 3px $color_encore_blue dashed;
+  border-radius: 3px;
+  margin-bottom: 20px;
+  padding: 20px 0px;
+
+  @include clearfix;
+
+  .button-col button {
+    min-width: em(164, true);
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  .powered {
+    position: relative;
+    padding-top: em(10);
+  }
+
+  h2{
+    font-size: em(18);
+    color: $color_encore_blue;
+    text-align: center;
+    font-weight: 900;
+  }
+
+  h3 {
+    font-size: em(16);
+    text-align: center;
+    color: $color_encore_blue;
+    font-weight: 900;
+  }
+
+  svg {
+    fill: $color_encore_blue;
+    margin: 0 auto em(12);
+    display: block;
+  }
+}

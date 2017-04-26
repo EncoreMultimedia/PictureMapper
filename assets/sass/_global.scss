@@ -1,0 +1,51 @@
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+  color: black;
+  background: orange;
+  font-size: 80px;
+  background-size: cover;
+}
+::selection {
+  background-color: $color_black;
+  color: $color_white;
+}
+
+button, .button {
+  cursor: pointer;
+  background-color: $color_encore_blue;
+
+  &:hover, &:focus {
+    background-color: $color_blue;
+  }
+}
+
+button.btn-setting {
+  margin-right: em(10);
+
+  &:first-of-type {
+    margin-left: em(10);
+  }
+}
+
+.button {
+  border-radius: 4px;
+}
+
+caption {
+  border: 3px solid $color_encore_blue;
+  color: $color_encore_blue;
+  margin-bottom: em(13);
+  border-radius: 4px;
+}
+
+//table {
+//  max-width: 350px;
+//}
+
+.main {
+  padding: em(30);
+}
