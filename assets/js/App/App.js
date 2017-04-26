@@ -13,11 +13,8 @@ export default class App extends Component {
       imageSizes:   this.props.imageSizes,
       multipliers:  this.props.multipliers,
       breakpointList: this.createBreakpointList(this.props.breakpoints),
+      calculationMode: 'percentage',
     };
-    //this.setImageSize();
-    //call to make a list of breakpoints ot be used with ImageSizes
-    //this.breakpointHandler();
-
   }
 
   componentDidMount() {
@@ -38,6 +35,10 @@ export default class App extends Component {
       breakpointList.push(breakpoints[i].name);
     }
     return breakpointList;
+  }
+
+  onChangeCalculationMode(mode) {
+    this.setState({calculationMode: mode.toString()});
   }
 
   onChangeImageSelectBreakpoint (id, value) {
@@ -150,7 +151,17 @@ export default class App extends Component {
     return (
       <article id="main" className="main">
         <div className="row">
-          <Settings  breakpoints={this.state.breakpoints} imageSizes={this.state.imageSizes} multipliers={this.state.multipliers} breakpointList={this.state.breakpointList} callbacks={{breakpointChange: this.onChangeImageSelectBreakpoint.bind(this), calcChange: this.onChangeCalculation.bind(this)}}/>
+          <Settings  breakpoints={this.state.breakpoints}
+                     imageSizes={this.state.imageSizes}
+                     multipliers={this.state.multipliers}
+                     breakpointList={this.state.breakpointList}
+                     calculationMode={this.state.calculationMode}
+                     callbacks={{
+                       breakpointChange: this.onChangeImageSelectBreakpoint.bind(this),
+                       calcChange: this.onChangeCalculation.bind(this),
+                       modeChange: this.onChangeCalculationMode.bind(this),
+                     }}
+          />
           <OutputTable breakpoints={this.state.breakpoints} multipliers={this.state.multipliers} />
         </div>
       </article>

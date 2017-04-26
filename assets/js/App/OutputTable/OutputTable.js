@@ -55,5 +55,4 @@ export default class OutputTable extends Component{
 OutputTable.propTypes = {
   breakpoints: PropTypes.arrayOf(PropTypes.object),
   multipliers: PropTypes.arrayOf(PropTypes.object),
-
 };

@@ -4,10 +4,6 @@ export default class SystemTable extends Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      radioImageValue: false,
-    };
   }
 
   tablefy(tableValues) {
@@ -48,7 +44,7 @@ export default class SystemTable extends Component {
         <th>{tableValues[0].header[2]}</th>
         <th>{tableValues[0].header[3]}</th>
         <th>Breakpoint</th>
-        {this.state.radioImageValue ? <th>Calc</th> : null}
+        {this.props.calculationMode === 'calculation' ? <th>Calc</th> : null}
       </tr>
     );
     // create the table body, if row.data == header then don't return the headings object.
@@ -62,7 +58,7 @@ export default class SystemTable extends Component {
                                   <td>{rowData.points[0]}</td>
                                   <td>{rowData.points[1]}</td>
                                   <td><select onChange={(e)=>this.onChangeList(e, rowData.id)} value={rowData.breakpoint ? rowData.breakpoint : ''}>{list}</select></td>
-                                  {this.state.radioImageValue ? <td><input type="text" onChange={(e)=>this.calcChange(e, rowData.id)} defaultValue={rowData.size} /></td> : null}
+                                  {this.props.calculationMode === 'calculation' ? <td><input type="text" onChange={(e)=>this.calcChange(e, rowData.id)} defaultValue={rowData.size} /></td> : null}
                                 </tr>
       );
     });
@@ -70,9 +66,9 @@ export default class SystemTable extends Component {
     return(
       <section>
         <fieldset onChange={(e)=>this.radioChange(e)}>
-          <input type="radio" name="image-mode" value={false} id="percentage" defaultChecked={true} />
+          <input type="radio" name="image-mode" value={'percentage'} id="percentage" defaultChecked={true} />
           <label htmlFor="percentage">Percentage Based</label>
-          <input type="radio" name="image-mode" value={true} id="calculation" />
+          <input type="radio" name="image-mode" value={'calculation'} id="calculation" />
           <label htmlFor="calculation">Calculation Based</label>
         </fieldset>
         <table className="stack">
@@ -89,10 +85,7 @@ export default class SystemTable extends Component {
   }
 
   radioChange(e) {
-
-    this.setState({
-      radioImageValue: JSON.parse(e.target.value),
-    });
+    this.props.callbacks.modeChange(e.target.value);
   }
 
   calcChange(e, rowDataID) {
@@ -138,5 +131,6 @@ export default class SystemTable extends Component {
 SystemTable.propTypes = {
   tableValue: PropTypes.arrayOf(PropTypes.object),
   breakpointList: PropTypes.array,
+  calculationMode: PropTypes.string,
   callbacks: PropTypes.objectOf(PropTypes.func),
 };

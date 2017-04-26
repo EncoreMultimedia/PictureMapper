@@ -33,7 +33,7 @@ export default class Settings extends Component{
           </div>
         </div>
         <section className="setting-systems">
-          <SystemTable tableValue={this.state.tableValue} breakpointList={this.props.breakpointList} callbacks={this.props.callbacks}/>
+          <SystemTable tableValue={this.state.tableValue} breakpointList={this.props.breakpointList} calculationMode={this.props.calculationMode} callbacks={this.props.callbacks}/>
         </section>
       </section>
     );
@@ -45,5 +45,6 @@ Settings.propTypes = {
   imageSizes: PropTypes.arrayOf(PropTypes.object),
   multipliers: PropTypes.arrayOf(PropTypes.object),
   breakpointList: PropTypes.array,
-  callbacks: PropTypes.func,
+  calculationMode: PropTypes.string,
+  callbacks: PropTypes.objectOf(PropTypes.func),
 };
