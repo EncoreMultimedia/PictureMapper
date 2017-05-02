@@ -143,6 +143,16 @@ export default class App extends Component {
     this.setImageSizes();
   }
 
+  onChangeBreakpointImageStyle(id, value) {
+    let breakpoints = this.state.breakpoints;
+    for(let i = 1; i < breakpoints.length; i++) {
+      if(breakpoints[i].id === id) {
+        breakpoints[i].style = value;
+      }
+    }
+    this.setState({breakpoints: breakpoints});
+  }
+
   /**
    * this.setImageSizes()
    * This method when called uses a hierarchy system that is implemented by imageSize properties and association with
@@ -262,7 +272,11 @@ export default class App extends Component {
                        imageSizeUpdate: this.imageSizeUpdate.bind(this),
                      }}
           />
-          <OutputTable breakpoints={this.state.breakpoints} multipliers={this.state.multipliers} />
+          <OutputTable breakpoints={this.state.breakpoints}
+                       multipliers={this.state.multipliers}
+                       breakpointStyleChange={this.onChangeBreakpointImageStyle.bind(this)}
+                       styleOptions={this.props.styleOptions}
+          />
         </div>
       </article>
     );
