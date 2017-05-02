@@ -10,7 +10,7 @@ const breakpoints = [
   },
   {
     id: 0,
-    name: 'Yoda Max',
+    name: 'small',
     width: 460,
     height: 0,
     aspectRatio: 0,

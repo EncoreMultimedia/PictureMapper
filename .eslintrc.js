@@ -13,7 +13,7 @@ module.exports = {
   },
   "rules": {
     "comma-dangle": ["error", "always-multiline"],
-    "indent": ["error", 2],
+    "indent": [2, 2, {"SwitchCase": 1}],
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single"],
     "semi": ["error", "always"],

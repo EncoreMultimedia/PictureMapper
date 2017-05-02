@@ -41,7 +41,13 @@ caption {
   margin-bottom: em(13);
   border-radius: 4px;
 }
+td input {
+  width: 100%;
+}
 
+.settings th {
+  column-width: 80px;
+}
 //table {
 //  max-width: 350px;
 //}

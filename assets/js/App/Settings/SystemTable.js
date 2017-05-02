@@ -8,9 +8,24 @@ export default class SystemTable extends Component {
 
   tablefy(tableValues) {
     switch(tableValues[0].header[0]) {
-    case 'breakpoints': return this.buildBreakpoints(tableValues);
-    case 'imageSizes':  return this.buildImageSizes(tableValues);
-    case 'multipliers': return this.buildMultipliers(tableValues);
+      case 'breakpoints': return this.buildBreakpoints(tableValues);
+      case 'imageSizes':  return this.buildImageSizes(tableValues);
+      case 'multipliers': return this.buildMultipliers(tableValues);
+    }
+  }
+
+  onBlurBreakpoint(e, property, id) {
+    if(e.target.value.trim() !== '') {
+      if(property === 'name' && e.target.value !== e.target.defaultValue) {
+        document.getElementById('name-bp-' + id).defaultValue = e.target.value;
+        this.props.callbacks.breakpointUpdate(e, property, id);
+      }
+      if(property === 'width' && e.target.value !== e.target.def+aultValue) {
+        document.getElementById('width-bp-' + id).defaultValue = e.target.value;
+        this.props.callbacks.breakpointUpdate(e, property, id);
+      }
+    } else {
+      document.getElementById('name-bp-' + id).setAttribute('value', e.target.value);
     }
   }
 
@@ -20,7 +35,14 @@ export default class SystemTable extends Component {
     // create the table body, if row.data == header then don't return the headings object.
     const tableBody = this.props.tableValue.map((rowData) => {
       return (
-        rowData.header ? null : <tr key={rowData.id}><td>{rowData.name}</td><td>{rowData.width}</td></tr>
+        rowData.header ? null : <tr key={rowData.id + 'breakpoint'}>
+                                  <td>
+                                    <input id={'name-bp-' + rowData.id} type="text" onBlur={(e)=>this.onBlurBreakpoint(e, 'name', rowData.id)}  defaultValue={rowData.name}/>
+                                  </td>
+                                  <td>
+                                    <input id={'width-bp-' + rowData.id} type="number" onBlur={(e)=>this.onBlurBreakpoint(e, 'width', rowData.id)} defaultValue={parseInt(rowData.width, 10)} />
+                                  </td>
+                                </tr>
       );
     });
     // return the breakpoint table
@@ -36,13 +58,26 @@ export default class SystemTable extends Component {
     );
   }
 
+  onBlurImageSize(e, property, id) {
+    if(e.target.value.trim() !== '') {
+      if(property === 'width' && e.target.value !== e.target.defaultValue) {
+        document.getElementById('width-is-' + id).defaultValue = e.target.value;
+        this.props.callbacks.imageSizeUpdate(e, property, id);
+      }
+      if(property === 'height' && e.target.value !== e.target.defaultValue) {
+        document.getElementById('height-is-' + id).defaultValue = e.target.value;
+        this.props.callbacks.imageSizeUpdate(e, property, id);
+      }
+    }
+  }
+
   buildImageSizes(tableValues) {
     // add the table headings
     const tableHeadings = (
       <tr>
         <th width='25'>{tableValues[0].header[1]}</th>
-        <th >{tableValues[0].header[2]}</th>
-        <th>{tableValues[0].header[3]}</th>
+        <th width='80' >{tableValues[0].header[2]}</th>
+        <th width='80'>{tableValues[0].header[3]}</th>
         <th>Breakpoint</th>
         {this.props.calculationMode === 'calculation' ? <th>Calc</th> : null}
       </tr>
@@ -50,13 +85,13 @@ export default class SystemTable extends Component {
     // create the table body, if row.data == header then don't return the headings object.
     const tableBody = this.props.tableValue.map((rowData) => {
       const list = this.props.breakpointList.map((value) => {
-        return <option key={value} value={value.toLowerCase()}>{value}</option>;
+        return <option key={value + 'select-list'} value={value.toLowerCase()}>{value}</option>;
       });
       return (
-        rowData.header ? null : <tr key={rowData.id}>
+        rowData.header ? null : <tr key={rowData.id + 'imageSizes'}>
                                   <td>{rowData.id}</td>
-                                  <td>{rowData.points[0]}</td>
-                                  <td>{rowData.points[1]}</td>
+                                  <td><input id={'width-is-' + rowData.id} defaultValue={rowData.points[0]} onBlur={(e)=>this.onBlurImageSize(e, 'width', rowData.id)} /></td>
+                                  <td><input id={'height-is-' + rowData.id} defaultValue={rowData.points[1]} onBlur={(e)=>this.onBlurImageSize(e, 'height', rowData.id)} /></td>
                                   <td><select onChange={(e)=>this.onChangeList(e, rowData.id)} value={rowData.breakpoint ? rowData.breakpoint : ''}>{list}</select></td>
                                   {this.props.calculationMode === 'calculation' ? <td><input type="text" onChange={(e)=>this.calcChange(e, rowData.id)} defaultValue={rowData.size} /></td> : null}
                                 </tr>
@@ -71,7 +106,7 @@ export default class SystemTable extends Component {
           <input type="radio" name="image-mode" value={'calculation'} id="calculation" />
           <label htmlFor="calculation">Calculation Based</label>
         </fieldset>
-        <table className="stack">
+        <table className="stack settings">
           <thead>
           {tableHeadings}
           </thead>
@@ -102,7 +137,7 @@ export default class SystemTable extends Component {
     // create the table body, if row.data == header then don't return the headings object.
     const tableBody = this.props.tableValue.map((rowData) => {
       return (
-        rowData.header ? null : <tr key={rowData.id}><td>{rowData.name}</td><td>{rowData.value}</td></tr>
+        rowData.header ? null : <tr key={rowData.id}><td><input defaultValue={rowData.name}/></td><td><input  defaultValue={rowData.name}/></td></tr>
       );
     });
     // return the Image Size table

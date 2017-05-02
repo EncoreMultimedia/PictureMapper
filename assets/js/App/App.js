@@ -15,6 +15,7 @@ export default class App extends Component {
       breakpointList: this.createBreakpointList(this.props.breakpoints),
       calculationMode: 'percentage',
     };
+    console.log('%c    Presented By: EncoreMultimedia.com   ', 'background: #fff; color: #0278ff  ');
   }
 
   componentDidMount() {
@@ -26,6 +27,89 @@ export default class App extends Component {
     return points.sort(function(a,b) {
       return a[0] - b[0];
     });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+
+  }
+
+  breakpointUpdate(value, changedElement, breakpoint) {
+
+    let breakpoints = this.state.breakpoints;
+
+    for(let i = 1; i < breakpoints.length; i++) {
+      if(changedElement === 'name' && parseInt(breakpoints[i].id) === parseInt(breakpoint)) {
+        breakpoints[i].name = value.target.value;
+      }
+      if(changedElement === 'width' && parseInt(breakpoints[i].id) === parseInt(breakpoint)) {
+        breakpoints[i].width = parseInt(value.target.value);
+      }
+    }
+
+    if(changedElement === 'width') {
+      breakpoints = this.sortByWidth(breakpoints);
+      this.setState({breakpoints: breakpoints});
+      this.setImageSizes();
+    } else {
+      this.setState({breakpoints: breakpoints, breakpointList: this.createBreakpointList(breakpoints)});
+    }
+  }
+
+  imageSizeUpdate(value, changedElement, imageSizeId) {
+    let imageSizes = this.state.imageSizes;
+
+    for(let i = 1; i < imageSizes.length; i++) {
+      if(changedElement === 'width' && imageSizes[i].id === imageSizeId) {
+        imageSizes[i].points[0] = parseInt(value.target.value);
+      }
+
+      if(changedElement === 'height' && imageSizes[i].id === imageSizeId) {
+        imageSizes[i].points[1] = parseInt(value.target.value);
+      }
+    }
+
+    if(changedElement === 'width') {
+      imageSizes = this.sortByImageWidth(imageSizes);
+    }
+
+    this.setState({imageSizes: imageSizes});
+    this.setImageSizes();
+
+  }
+
+
+  sortByWidth(arr) {
+    arr.sort((a,b)=>{
+      if(a.header || b.header) {
+        return null;
+      } else {
+        return parseInt(a.width) - parseInt(b.width);
+      }
+    });
+    return arr;
+  }
+
+  sortByImageWidth(arr) {
+    arr.sort((a,b)=>{
+      if(a.header || b.header) {
+        return null;
+      } else {
+        return parseInt(a.points[0]) - parseInt(b.points[0]);
+      }
+    });
+    return arr;
+  }
+
+  reIdObjects() {
+    let arr = this.state.breakpoints;
+    console.log(arr);
+    for(let i = 0; i < arr.length; i++) {
+      if(!arr[i].header) {
+        arr[i].id = parseInt(i - 1);
+        console.log(arr[i]);
+      }
+    }
+    this.setState({breakpoints: arr});
   }
 
   createBreakpointList(breakpoints) {
@@ -43,7 +127,11 @@ export default class App extends Component {
 
   onChangeImageSelectBreakpoint (id, value) {
     let imageSizes = this.state.imageSizes;
-    imageSizes[id +1].breakpoint = value.toString();
+    for(let i = 1; i < imageSizes.length; i++) {
+      if(imageSizes[i].id === id) {
+        imageSizes[i].breakpoint = value.toString();
+      }
+    }
     this.setState({imageSizes: imageSizes});
     this.setImageSizes();
   }
@@ -93,9 +181,9 @@ export default class App extends Component {
         let j = 0;
         while(j !== stopPoint[i + 1]) {
 
-          if(this.state.calculationMode == 'percentage') {
+          if(this.state.calculationMode === 'percentage') {
             breakpoints[j+1].image.width = this.calculateImageWidthByPercentage(imageSize[i + 1].points[0], containerWidth, breakpoints[j+1].width);
-          } else if(this.state.calculationMode == 'calculation') {
+          } else if(this.state.calculationMode === 'calculation') {
             breakpoints[j+1].image.width = this.calculateImageWidthByCalc(breakpoints[j+1].width, imageSize[i+1].size);
           }
 
@@ -109,9 +197,9 @@ export default class App extends Component {
         let j = stopPoint[i];
         while (j < breakpoints.length - 1) {
 
-          if(this.state.calculationMode == 'percentage') {
+          if(this.state.calculationMode === 'percentage') {
             breakpoints[j+1].image.width = this.calculateImageWidthByPercentage(imageSize[i + 1].points[0], containerWidth, breakpoints[j+1].width);
-          } else if(this.state.calculationMode == 'calculation') {
+          } else if(this.state.calculationMode === 'calculation') {
             breakpoints[j+1].image.width = this.calculateImageWidthByCalc(breakpoints[j+1].width, imageSize[i+1].size);
           }
 
@@ -125,9 +213,9 @@ export default class App extends Component {
         let j = stopPoint[i];
         while ( j !== stopPoint[i + 1]) {
 
-          if(this.state.calculationMode == 'percentage') {
+          if(this.state.calculationMode === 'percentage') {
             breakpoints[j+1].image.width = this.calculateImageWidthByPercentage(imageSize[i + 1].points[0], containerWidth, breakpoints[j+1].width);
-          } else if(this.state.calculationMode == 'calculation') {
+          } else if(this.state.calculationMode === 'calculation') {
             breakpoints[j+1].image.width = this.calculateImageWidthByCalc(breakpoints[j+1].width, imageSize[i+1].size);
           }
 
@@ -170,6 +258,8 @@ export default class App extends Component {
                        breakpointChange: this.onChangeImageSelectBreakpoint.bind(this),
                        calcChange: this.onChangeCalculation.bind(this),
                        modeChange: this.onChangeCalculationMode.bind(this),
+                       breakpointUpdate: this.breakpointUpdate.bind(this),
+                       imageSizeUpdate: this.imageSizeUpdate.bind(this),
                      }}
           />
           <OutputTable breakpoints={this.state.breakpoints} multipliers={this.state.multipliers} />
