@@ -14,6 +14,7 @@ export default class App extends Component {
       multipliers:  this.props.multipliers,
       breakpointList: this.createBreakpointList(this.props.breakpoints),
       calculationMode: 'percentage',
+      imageStyleShown: false,
     };
     console.log('%c    Presented By: EncoreMultimedia.com   ', 'background: #fff; color: #0278ff  ');
   }
@@ -153,6 +154,10 @@ export default class App extends Component {
     this.setState({breakpoints: breakpoints});
   }
 
+  onChangeImageStyleShown(value) {
+    this.setState({imageStyleShown: value});
+  }
+
   /**
    * this.setImageSizes()
    * This method when called uses a hierarchy system that is implemented by imageSize properties and association with
@@ -255,6 +260,34 @@ export default class App extends Component {
     return Math.floor(width / aspectRatio);
   }
 
+  exportCSV() {
+    let breakpoints = this.state.breakpoints;
+    let multipliers = this.state.multipliers;
+
+    let csv = [];
+    csv.push('data:text/csv;charset=utf-8,' + ['Breakpoint', 'Width', 'Height', 'Multiplier', 'Style'].join(', '));
+
+    for(let i = 1; i < breakpoints.length; i++) {
+      csv.push([breakpoints[i].name, breakpoints[i].image.width, breakpoints[i].image.height, 1, breakpoints[i].style].join(', '));
+      for(let j = 1; j < multipliers.length; j++) {
+        csv.push([breakpoints[i].name,
+          multipliers[j].value*breakpoints[i].image.width,
+          multipliers[j].value*breakpoints[i].image.height,
+          multipliers[j].name,
+          breakpoints[i].style].join(', '));
+      }
+    }
+
+    let csvString = encodeURI(csv.join("\n"));
+
+    let link = document.createElement("a");
+    link.setAttribute("href", csvString);
+    link.setAttribute("download", "breakpoints.csv");
+    document.body.appendChild(link); // Required for FF
+
+    link.click();
+  }
+
   render() {
     return (
       <article id="main" className="main">
@@ -270,12 +303,15 @@ export default class App extends Component {
                        modeChange: this.onChangeCalculationMode.bind(this),
                        breakpointUpdate: this.breakpointUpdate.bind(this),
                        imageSizeUpdate: this.imageSizeUpdate.bind(this),
+                       imageStyleShownChange: this.onChangeImageStyleShown.bind(this),
+                       exportCSV: this.exportCSV.bind(this),
                      }}
           />
           <OutputTable breakpoints={this.state.breakpoints}
                        multipliers={this.state.multipliers}
                        breakpointStyleChange={this.onChangeBreakpointImageStyle.bind(this)}
                        styleOptions={this.props.styleOptions}
+                       imageStyleShown={this.state.imageStyleShown}
           />
         </div>
       </article>

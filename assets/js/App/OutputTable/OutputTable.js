@@ -33,9 +33,10 @@ export default class OutputTable extends Component{
             <td>{breakpoint.image ? breakpoint.image.width : null}</td>
             <td>{breakpoint.image ? breakpoint.image.height : null}</td>
             <td>{breakpoint.image ? Math.round(Math.floor(breakpoint.image.width) / Math.floor(breakpoint.image.height) * 100) / 100 : null }</td>
+            { this.props.imageStyleShown &&
             <td rowSpan={multipliers.length}>
               <select onChange={(e)=>this.props.breakpointStyleChange(breakpoint.id, e.target.value)} defaultValue={breakpoint.style}>{styleOptions}</select>
-            </td>
+            </td>}
           </tr>
           {multipliers}
         </tbody>
@@ -52,7 +53,7 @@ export default class OutputTable extends Component{
               <th>Image Width</th>
               <th>Image Height</th>
               <th>Aspect Ratio</th>
-              <th>Image Style</th>
+              { this.props.imageStyleShown && <th>Image Style</th>}
             </tr>
           </thead>
 
@@ -69,4 +70,5 @@ OutputTable.propTypes = {
   multipliers: PropTypes.arrayOf(PropTypes.object),
   styleOptions: PropTypes.arrayOf(PropTypes.object),
   breakpointStyleChange: PropTypes.func,
+  imageStyleShown: PropTypes.bool,
 };
