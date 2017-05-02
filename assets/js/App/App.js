@@ -77,6 +77,22 @@ export default class App extends Component {
 
   }
 
+  multiplierUpdate(value, changedInput, id) {
+    console.log(changedInput);
+    let multipliers = this.state.multipliers;
+
+    for(let i = 1; i < multipliers.length; i++) {
+      if(changedInput === 'name' && parseInt(id, 10) === parseInt(multipliers[i].id)) {
+        multipliers[i].name = value;
+      }
+      if(changedInput === 'value' && parseInt(id, 10) === parseInt(multipliers[i].id)) {
+        multipliers[i].value = value;
+      }
+    }
+
+    this.setState({multipliers: multipliers});
+    this.setImageSizes();
+  }
 
   sortByWidth(arr) {
     arr.sort((a,b)=>{
@@ -142,6 +158,8 @@ export default class App extends Component {
     this.setState({imageSizes: imageSizes});
     this.setImageSizes();
   }
+
+
 
   /**
    * this.setImageSizes()
@@ -227,6 +245,7 @@ export default class App extends Component {
       }
     }
     //set the breakpoint that where changed to the state.
+
     this.setState({breakpoints: breakpoints});
   }
   //get the image width two decimal places
@@ -260,6 +279,7 @@ export default class App extends Component {
                        modeChange: this.onChangeCalculationMode.bind(this),
                        breakpointUpdate: this.breakpointUpdate.bind(this),
                        imageSizeUpdate: this.imageSizeUpdate.bind(this),
+                       multiplierUpdate: this.multiplierUpdate.bind(this),
                      }}
           />
           <OutputTable breakpoints={this.state.breakpoints} multipliers={this.state.multipliers} />

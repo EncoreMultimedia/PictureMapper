@@ -129,13 +129,27 @@ export default class SystemTable extends Component {
     this.props.callbacks.breakpointChange(rowDataID, e.target.value);
   }
 
+  onChangeMultiplier(e, property, id ) {
+    if(e.target.value.trim() !== '') {
+      if(property === 'name' && e.target.value !== e.target.defaultValue) {
+        this.props.callbacks.multiplierUpdate(e.target.value, property, id);
+      }
+      if(property === 'value' && e.target.value !== e.target.defaultValue) {
+        this.props.callbacks.multiplierUpdate(e.target.value, property, id);
+      }
+    }
+  }
+
   buildMultipliers(tableValues) {
     // add the table headings
     const tableHeadings = <tr><th>{tableValues[0].header[1]}</th><th>{tableValues[0].header[2]}</th></tr>;
     // create the table body, if row.data == header then don't return the headings object.
     const tableBody = this.props.tableValue.map((rowData) => {
       return (
-        rowData.header ? null : <tr key={rowData.id}><td><input defaultValue={rowData.name}/></td><td><input  defaultValue={rowData.name}/></td></tr>
+        rowData.header ? null : <tr key={rowData.id}>
+                                  <td><input id={'multi-name-'+rowData.id} onBlur={(e)=>this.onChangeMultiplier(e, 'name', rowData.id)} defaultValue={rowData.name}/></td>
+                                  <td><input id={'multi-value-'+rowData.id} onBlur={(e)=>this.onChangeMultiplier(e, 'value', rowData.id)} defaultValue={rowData.value}/></td>
+                                </tr>
       );
     });
     // return the Image Size table
