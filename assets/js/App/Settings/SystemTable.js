@@ -75,7 +75,6 @@ export default class SystemTable extends Component {
     // add the table headings
     const tableHeadings = (
       <tr>
-        <th width='25'>{tableValues[0].header[1]}</th>
         <th width='80' >{tableValues[0].header[2]}</th>
         <th width='80'>{tableValues[0].header[3]}</th>
         <th>Breakpoint</th>
@@ -89,7 +88,6 @@ export default class SystemTable extends Component {
       });
       return (
         rowData.header ? null : <tr key={rowData.id + 'imageSizes'}>
-                                  <td>{rowData.id}</td>
                                   <td><input id={'width-is-' + rowData.id} defaultValue={rowData.points[0]} onBlur={(e)=>this.onBlurImageSize(e, 'width', rowData.id)} /></td>
                                   <td><input id={'height-is-' + rowData.id} defaultValue={rowData.points[1]} onBlur={(e)=>this.onBlurImageSize(e, 'height', rowData.id)} /></td>
                                   <td><select onChange={(e)=>this.onChangeList(e, rowData.id)} value={rowData.breakpoint ? rowData.breakpoint : ''}>{list}</select></td>
