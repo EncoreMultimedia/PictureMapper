@@ -12,7 +12,6 @@ const breakpoints = [
     id: 0,
     name: 'small',
     width: 460,
-    height: 0,
     aspectRatio: 0,
     multipliers: [],
     image: {
@@ -25,7 +24,6 @@ const breakpoints = [
     id: 1,
     name: 'Yoda',
     width: 680,
-    height: 0,
     aspectRatio: 0,
     multipliers: [],
     image: {
@@ -38,7 +36,6 @@ const breakpoints = [
     id: 2,
     name: 'Ewok',
     width: 760,
-    height: 0,
     aspectRatio: 0,
     multipliers: [],
     image: {
@@ -51,7 +48,6 @@ const breakpoints = [
     id: 3,
     name: 'Luke',
     width: 860,
-    height: 0,
     aspectRatio: 0,
     multipliers: [],
     image: {
@@ -64,7 +60,6 @@ const breakpoints = [
     id: 4,
     name: 'Vader',
     width: 1000,
-    height: 0,
     aspectRatio: 0,
     multipliers: [],
     image: {
@@ -77,7 +72,6 @@ const breakpoints = [
     id: 5,
     name: 'Jabba',
     width: 1200,
-    height: 0,
     aspectRatio: 0,
     multipliers: [],
     image: {
@@ -90,7 +84,6 @@ const breakpoints = [
     id: 6,
     name: 'ATAT',
     width: 1500,
-    height: 0,
     aspectRatio: 0,
     multipliers: [],
     image: {
@@ -135,15 +128,11 @@ const multipliers = [
     id: 0,
     name: '2',
     value: 1.5,
-    width: 0,
-    height: 0,
   },
   {
     id: 1,
     name: '2.5',
     value: 2,
-    width: 0,
-    height: 0,
   },
 
 ];

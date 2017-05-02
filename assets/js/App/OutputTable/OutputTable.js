@@ -4,11 +4,18 @@ import PropTypes from 'prop-types';
 
 export default class OutputTable extends Component{
   render() {
+
+    const styleOptions = this.props.styleOptions.map((style)=>{
+      return (
+        <option key={style.value} value={style.value}>{style.name}</option>
+      );
+    });
+
     const breakpoints = this.props.breakpoints.map((breakpoint)=>{
       const multipliers = this.props.multipliers.map((multiplier)=>{
         return (
           multiplier.value?
-            <tr key={multiplier.id}>
+            <tr key={multiplier.id} className="multiplier">
               <td>&nbsp;&nbsp;&nbsp;&nbsp;Multiplier - {multiplier.value}</td>
               <td>{breakpoint.image ? Math.floor(breakpoint.image.width * multiplier.value) : null}</td>
               <td>{breakpoint.image ? Math.floor(breakpoint.image.height * multiplier.value) : null}</td>
@@ -17,14 +24,19 @@ export default class OutputTable extends Component{
             :null
         );
       });
+
       return (
         breakpoint.header ? null :
         <tbody key={breakpoint.id}>
-          <tr>
+          <tr className="image">
             <td><b>{breakpoint.name}</b></td>
             <td>{breakpoint.image ? breakpoint.image.width : null}</td>
             <td>{breakpoint.image ? breakpoint.image.height : null}</td>
             <td>{breakpoint.image ? Math.round(Math.floor(breakpoint.image.width) / Math.floor(breakpoint.image.height) * 100) / 100 : null }</td>
+            { this.props.imageStyleShown &&
+            <td rowSpan={multipliers.length}>
+              <select onChange={(e)=>this.props.breakpointStyleChange(breakpoint.id, e.target.value)} defaultValue={breakpoint.style}>{styleOptions}</select>
+            </td>}
           </tr>
           {multipliers}
         </tbody>
@@ -41,6 +53,7 @@ export default class OutputTable extends Component{
               <th>Image Width</th>
               <th>Image Height</th>
               <th>Aspect Ratio</th>
+              { this.props.imageStyleShown && <th>Image Style</th>}
             </tr>
           </thead>
 
@@ -55,4 +68,7 @@ export default class OutputTable extends Component{
 OutputTable.propTypes = {
   breakpoints: PropTypes.arrayOf(PropTypes.object),
   multipliers: PropTypes.arrayOf(PropTypes.object),
+  styleOptions: PropTypes.arrayOf(PropTypes.object),
+  breakpointStyleChange: PropTypes.func,
+  imageStyleShown: PropTypes.bool,
 };
