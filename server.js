@@ -4,7 +4,9 @@ const Twig = require('twig');
 const webpackMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const webpack = require('webpack');
-
+const multer = require('multer');
+const fs = require('fs');
+const ImageProcessor = require('./controllers/ImageProcessor/ImageProcessor');
 const app = express();
 
 if(process.env.NODE_ENV === 'development'){
@@ -42,6 +44,42 @@ app.get('/', function(req, res){
 app.get('/about', function(req, res){
   res.render('about.twig',{
     message: 'This is about',
+  });
+});
+
+let storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now());
+  },
+});
+
+let upload = multer({storage: storage});
+
+app.post('/image-export', upload.single('image'), function(req, res){
+
+  let focalPoint = JSON.parse(req.body.focalPoint);
+  let sizes = JSON.parse(req.body.sizes);
+
+  let imageproc = new ImageProcessor(req.file, focalPoint, sizes);
+
+  imageproc.process(function(url) {
+    res.send(url);
+  });
+});
+
+app.get('/download/:file', function (req, res) {
+  let filePath = './output/' + req.params.file;
+  res.download(filePath, req.params.file, function(err){
+    if(err) {
+      res.status(404).end();
+    } else {
+      fs.unlink(filePath, (err) => {
+        if(err) return console.log(err);
+      });
+    }
   });
 });
 
