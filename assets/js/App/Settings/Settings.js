@@ -58,14 +58,15 @@ export default class Settings extends Component{
               <button className={'btn-setting button' + (this.state.exportPanel == 'image' ? ' active' : '')} onClick={() => this.onClickExportHandler('image')}>Image Export</button>
               <button className={'btn-setting button' + (this.state.exportPanel == 'markup' ? ' active' : '')} onClick={() => this.onClickExportHandler('markup')}>Markup</button>
             </div>
+            {this.state.exportPanel == 'csv' && <div className="setting-wrapper">
+              <p>This will export a CSV in a specific format for this Picture_mapper module that can be found <a className="" href="https://www.drupal.org/sandbox/thelostcookie/2742243">here</a>.</p>
+              <button className="btn-setting button secondary" onClick={() => this.props.callbacks.exportCSV()}>Export</button>
+            </div>}
+
+            {this.state.exportPanel == 'image' && <ImageExport uploadImage={this.props.callbacks.uploadImage} exportDownload={this.props.downloads.imageExport} removeDownload={this.props.callbacks.removeDownload} />}
           </div>
 
-          {this.state.exportPanel == 'csv' && <div className="setting-wrapper">
-            <p>This will export a CSV in a specific format for this fancy drupal module</p>
-            <button className="btn-setting button secondary" onClick={() => this.props.callbacks.exportCSV()}>Export</button>
-          </div>}
 
-          {this.state.exportPanel == 'image' && <ImageExport uploadImage={this.props.callbacks.uploadImage} exportDownload={this.props.downloads.imageExport} removeDownload={this.props.callbacks.removeDownload} />}
 
         </section>
       </section>

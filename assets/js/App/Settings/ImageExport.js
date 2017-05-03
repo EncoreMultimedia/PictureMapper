@@ -6,6 +6,7 @@ export default class ImageExport extends Component{
 
   constructor(props) {
     super(props);
+
     this.state = {
       acceptedFile: null,
       focalPoint: null,
@@ -14,7 +15,7 @@ export default class ImageExport extends Component{
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if(prevProps.exportDownload != this.props.exportDownload) {
+    if(prevProps.exportDownload !== this.props.exportDownload) {
       this.setState({processing: false});
     }
   }
@@ -49,7 +50,11 @@ export default class ImageExport extends Component{
   }
 
   render() {
-    let dropContent = <p>Drop image to pick a focal point and upload.</p>;
+    let dropContent = <ol>
+                        <li>Drop image here</li>
+                        <li>Pick a focal point on your image</li>
+                        <li>Then click upload</li>
+                      </ol>;
 
     let style={
       width: '100%',
@@ -62,25 +67,25 @@ export default class ImageExport extends Component{
       overflow: 'hidden',
     };
 
-    if(this.state.acceptedFile != null) {
+    if(this.state.acceptedFile !== null) {
       dropContent = <img src={this.state.acceptedFile.preview} onClick={(e)=>this.setFocalPoint(e)} />;
       style.padding = 0;
     }
 
     let submitButton = <p>Please click the image to set a focal point</p>;
 
-    if(this.state.focalPoint != null) {
+    if(this.state.focalPoint !== null) {
       submitButton = <button className="button secondary" onClick={()=>this.upload()}>Upload</button>;
     }
 
     let exportDownload = null;
 
-    if(this.props.exportDownload != null) {
+    if(this.props.exportDownload !== null) {
       exportDownload = <a href={this.props.exportDownload} onClick={()=>this.props.removeDownload('imageExport')} target="_blank">Download</a>;
     }
 
     return (
-      <div className="setting-wrapper">
+      <div className="setting-wrapper-drop-zone">
         <h4>Upload Image</h4>
         <Dropzone className="drop-zone" style={style} accept="image/jpeg, image/png" multiple={false} disableClick={true} onDrop={this.onDrop.bind(this)}>
           {dropContent}
@@ -93,7 +98,7 @@ export default class ImageExport extends Component{
           </div>}
         </Dropzone>
 
-        {this.state.acceptedFile != null && submitButton}
+        {this.state.acceptedFile !== null && submitButton}
         {this.state.processing && <p>Processing</p>}
         {!this.state.processing && exportDownload}
       </div>
