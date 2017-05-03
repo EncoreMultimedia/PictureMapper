@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import cloneDeep from 'lodash/cloneDeep';
+
 export default class SystemTable extends Component {
 
   constructor(props) {
@@ -46,16 +48,19 @@ export default class SystemTable extends Component {
     // add the table headings
     const tableHeadings = <tr><th>{tableValues[0].header[1]}</th><th>{tableValues[0].header[2]}</th></tr>;
     // create the table body, if row.data == header then don't return the headings object.
+
     const tableBody = this.props.tableValue.map((rowData) => {
+      const disabled = rowData.id == 0 ? true : false;
+      const removeDisabled = disabled || this.props.tableValue.length <= 3 ? true : false;
       return (
         rowData.header ? null : <tr key={rowData.id + 'breakpoint'}>
                                   <td>
-                                    <input id={'name-bp-' + rowData.id} type="text" onBlur={(e)=>this.onBlurBreakpoint(e, 'name', rowData.id)}  defaultValue={rowData.name}/>
+                                    <input id={'name-bp-' + rowData.id} type="text" onBlur={(e)=>this.onBlurBreakpoint(e, 'name', rowData.id)}  defaultValue={rowData.name} disabled={disabled}/>
                                   </td>
                                   <td>
-                                    <input id={'width-bp-' + rowData.id} type="number" onBlur={(e)=>this.onBlurBreakpoint(e, 'width', rowData.id)} defaultValue={parseInt(rowData.width, 10)} />
+                                    <input id={'width-bp-' + rowData.id} type="number" onBlur={(e)=>this.onBlurBreakpoint(e, 'width', rowData.id)} defaultValue={parseInt(rowData.width, 10)} disabled={disabled} />
                                   </td>
-                                  <td><button onClick={()=>this.props.callbacks.deleteBreakpoint(rowData.id)} className="button alert tooltip">x<span className="tooltiptext">Delete {rowData.name} Breakpoint</span></button></td>
+                                  <td><button onClick={()=>this.props.callbacks.deleteBreakpoint(rowData.id)} className="button alert tooltip" disabled={removeDisabled}>x<span className="tooltiptext">Delete {rowData.name} Breakpoint</span></button></td>
                                 </tr>
       );
     });
@@ -100,9 +105,13 @@ export default class SystemTable extends Component {
         {this.props.calculationMode === 'calculation' ? <th>Calc</th> : null}
       </tr>
     );
+
+    let breakpointList = cloneDeep(this.props.breakpointList);
+    breakpointList.splice(-1, 1);
+
     // create the table body, if row.data == header then don't return the headings object.
     const tableBody = this.props.tableValue.map((rowData) => {
-      const list = this.props.breakpointList.map((value) => {
+      const list = breakpointList.map((value) => {
         return <option key={value + 'select-list'} value={value.toLowerCase()}>{value}</option>;
       });
       return (

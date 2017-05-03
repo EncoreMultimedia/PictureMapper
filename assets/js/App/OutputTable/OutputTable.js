@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import cloneDeep from 'lodash/cloneDeep';
 
 
 export default class OutputTable extends Component{
@@ -11,7 +12,11 @@ export default class OutputTable extends Component{
       );
     });
 
-    const breakpoints = this.props.breakpoints.map((breakpoint)=>{
+    let breakpointList = cloneDeep(this.props.breakpoints);
+    breakpointList.splice(-1, 1);
+
+
+    const breakpoints = breakpointList.map((breakpoint)=>{
       const multipliers = this.props.multipliers.map((multiplier)=>{
         return (
           multiplier.value?

@@ -82,10 +82,31 @@ export default class App extends Component {
 
   deleteBreakpoint(id) {
     let breakpoints = this.state.breakpoints;
+    let imageSizes = this.state.imageSizes;
     for(let i = 1; i < breakpoints.length; i++) {
       if(parseInt(id) === parseInt(breakpoints[i].id)) {
+
+
+        let lowerName = breakpoints[i].name.toLowerCase();
+        let newLastLowerName;
+
+        // If we're deleting the last breakpoint in the list
+        if(typeof breakpoints[i+1] == 'undefined') {
+          // Grab the "new" last breakpoint name
+          newLastLowerName = breakpoints[i-1].name.toLowerCase();
+        }
+
+        // Change image styles to default if they are using this breakpoint or
+        // the previous breakpoint if we're deleting the last in the list
+        for(let j = 1; j < imageSizes.length; j++) {
+          if(imageSizes[j].breakpoint == lowerName || imageSizes[j].breakpoint == newLastLowerName) {
+            console.log(imageSizes[j]);
+            imageSizes[j].breakpoint = 'default';
+          }
+        }
+
         breakpoints.splice(i, 1);
-        this.setState({breakpoints: breakpoints, breakpointList: this.createBreakpointList(breakpoints)});
+        this.setState({breakpoints: breakpoints, breakpointList: this.createBreakpointList(breakpoints), imageSizes: imageSizes});
       }
     }
   }
@@ -131,13 +152,12 @@ export default class App extends Component {
     for(let i = 1; i < imageSizes.length; i++) {
       if(parseInt(id) === parseInt(imageSizes[i].id)) {
         imageSizes.splice(i, 1);
-        this.setState({imageSizes: imageSizes});
+        this.setState({imageSizes: imageSizes}, ()=> this.setImageSizes());
       }
     }
   }
 
   multiplierUpdate(value, changedInput, id) {
-    console.log(changedInput);
     let multipliers = this.state.multipliers;
 
     for(let i = 1; i < multipliers.length; i++) {
@@ -150,7 +170,6 @@ export default class App extends Component {
     }
 
     this.setState({multipliers: multipliers});
-    this.setImageSizes();
   }
 
   addMultiplier(name, value) {
@@ -163,7 +182,6 @@ export default class App extends Component {
     });
 
     this.setState({multipliers: multipliers,multipliersCounter: this.state.multipliersCounter + 1});
-    this.setImageSizes();
   }
 
   deleteMultiplier(id) {
@@ -290,14 +308,19 @@ export default class App extends Component {
     for(let i = 0; i < stopPoint.length; i++) {
       //check if it is the first element
       if (typeof stopPoint[i - 1] === 'undefined') {
-        let containerWidth = breakpoints[stopPoint[i]+1].width;
+        let containerWidth = breakpoints[stopPoint[i]+2].width;
         let j = 0;
-        while(j !== stopPoint[i + 1]) {
+
+        let stopBreakpoint = stopPoint[i + 1];
+        if(typeof stopBreakpoint == 'undefined')
+          stopBreakpoint = breakpoints.length-2;
+
+        while(j !== stopBreakpoint) {
 
           if(this.state.calculationMode === 'percentage') {
-            breakpoints[j+1].image.width = this.calculateImageWidthByPercentage(imageSize[i + 1].points[0], containerWidth, breakpoints[j+1].width);
+            breakpoints[j+1].image.width = this.calculateImageWidthByPercentage(imageSize[i + 1].points[0], containerWidth, breakpoints[j+2].width);
           } else if(this.state.calculationMode === 'calculation') {
-            breakpoints[j+1].image.width = this.calculateImageWidthByCalc(breakpoints[j+1].width, imageSize[i+1].size);
+            breakpoints[j+1].image.width = this.calculateImageWidthByCalc(breakpoints[j+2].width, imageSize[i+1].size);
           }
 
           breakpoints[j+1].image.height = this.calculateImageHeightLinear(imageSize[i + 1].points[0] / imageSize[i + 1].points[1], breakpoints[j+1].image.width);
@@ -306,14 +329,14 @@ export default class App extends Component {
         }
         //Check to see if last element in the array.
       } else if (typeof stopPoint[i + 1] === 'undefined' ) {
-        let containerWidth = breakpoints[stopPoint[i]+1].width;
+        let containerWidth = breakpoints[stopPoint[i]+2].width;
         let j = stopPoint[i];
-        while (j < breakpoints.length - 1) {
+        while (j < breakpoints.length - 2) {
 
           if(this.state.calculationMode === 'percentage') {
-            breakpoints[j+1].image.width = this.calculateImageWidthByPercentage(imageSize[i + 1].points[0], containerWidth, breakpoints[j+1].width);
+            breakpoints[j+1].image.width = this.calculateImageWidthByPercentage(imageSize[i + 1].points[0], containerWidth, breakpoints[j+2].width);
           } else if(this.state.calculationMode === 'calculation') {
-            breakpoints[j+1].image.width = this.calculateImageWidthByCalc(breakpoints[j+1].width, imageSize[i+1].size);
+            breakpoints[j+1].image.width = this.calculateImageWidthByCalc(breakpoints[j+2].width, imageSize[i+1].size);
           }
 
           breakpoints[j+1].image.height = this.calculateImageHeightLinear(imageSize[i + 1].points[0] / imageSize[i + 1].points[1], breakpoints[j+1].image.width);
@@ -322,14 +345,14 @@ export default class App extends Component {
         }
         //if not first or last element handle all common cases.
       } else {
-        let containerWidth = breakpoints[stopPoint[i]+1].width;
+        let containerWidth = breakpoints[stopPoint[i]+2].width;
         let j = stopPoint[i];
         while ( j !== stopPoint[i + 1]) {
 
           if(this.state.calculationMode === 'percentage') {
-            breakpoints[j+1].image.width = this.calculateImageWidthByPercentage(imageSize[i + 1].points[0], containerWidth, breakpoints[j+1].width);
+            breakpoints[j+1].image.width = this.calculateImageWidthByPercentage(imageSize[i + 1].points[0], containerWidth, breakpoints[j+2].width);
           } else if(this.state.calculationMode === 'calculation') {
-            breakpoints[j+1].image.width = this.calculateImageWidthByCalc(breakpoints[j+1].width, imageSize[i+1].size);
+            breakpoints[j+1].image.width = this.calculateImageWidthByCalc(breakpoints[j+2].width, imageSize[i+1].size);
           }
 
           breakpoints[j+1].image.height = this.calculateImageHeightLinear(imageSize[i + 1].points[0] / imageSize[i + 1].points[1], breakpoints[j+1].image.width);
@@ -366,7 +389,7 @@ export default class App extends Component {
     let csv = [];
     csv.push('data:text/csv;charset=utf-8,' + ['Breakpoint', 'Width', 'Height', 'Multiplier', 'Style'].join(', '));
 
-    for(let i = 1; i < breakpoints.length; i++) {
+    for(let i = 1; i < breakpoints.length-1; i++) {
       csv.push([breakpoints[i].name, breakpoints[i].image.width, breakpoints[i].image.height, 1, breakpoints[i].style].join(', '));
       for(let j = 1; j < multipliers.length; j++) {
         csv.push([breakpoints[i].name,
@@ -396,7 +419,7 @@ export default class App extends Component {
     let multipliers = this.state.multipliers;
     let sizes = [];
 
-    for(let i = 1; i < breakpoints.length; i++) {
+    for(let i = 1; i < breakpoints.length-1; i++) {
       sizes.push({
         name: breakpoints[i].name,
         width: breakpoints[i].image.width,

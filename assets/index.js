@@ -10,18 +10,18 @@ const breakpoints = [
   },
   {
     id: 0,
-    name: 'Yoda Max',
-    width: 460,
+    name: 'Default',
+    width: 0,
     image: {
-      width: 320,
-      height: 181,
+      width: 0,
+      height: 0,
     },
     style: 'focal_point_scale_and_crop',
   },
   {
     id: 1,
     name: 'Yoda',
-    width: 680,
+    width: 460,
     image: {
       width: 0,
       height: 0,
@@ -31,7 +31,7 @@ const breakpoints = [
   {
     id: 2,
     name: 'Ewok',
-    width: 760,
+    width: 680,
     image: {
       width: 0,
       height: 0,
@@ -41,7 +41,7 @@ const breakpoints = [
   {
     id: 3,
     name: 'Luke',
-    width: 860,
+    width: 760,
     image: {
       width: 0,
       height: 0,
@@ -51,7 +51,7 @@ const breakpoints = [
   {
     id: 4,
     name: 'Vader',
-    width: 1000,
+    width: 860,
     image: {
       width: 0,
       height: 0,
@@ -61,7 +61,7 @@ const breakpoints = [
   {
     id: 5,
     name: 'Jabba',
-    width: 1200,
+    width: 1000,
     image: {
       width: 0,
       height: 0,
@@ -71,6 +71,16 @@ const breakpoints = [
   {
     id: 6,
     name: 'ATAT',
+    width: 1200,
+    image: {
+      width: 0,
+      height: 0,
+    },
+    style: 'focal_point_scale_and_crop',
+  },
+  {
+    id: 7,
+    name: 'Deathstar',
     width: 1500,
     image: {
       width: 0,
@@ -99,7 +109,7 @@ const imageSizes = [
   },
   {
     id: 2,
-    points: [1500,554],
+    points: [1200,554],
     breakpoint: 'atat',
     size: '100vw',
   },
