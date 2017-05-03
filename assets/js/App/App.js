@@ -15,6 +15,9 @@ export default class App extends Component {
       breakpointList: this.createBreakpointList(this.props.breakpoints),
       calculationMode: 'percentage',
       imageStyleShown: false,
+      downloads: {
+        imageExport: null,
+      },
     };
     console.log('%c    Presented By: EncoreMultimedia.com   ', 'background: #fff; color: #0278ff  ');
   }
@@ -306,6 +309,53 @@ export default class App extends Component {
     link.click();
   }
 
+  uploadImage(file, focalPoint) {
+    let data = new FormData();
+    data.append('image', file);
+    data.append('focalPoint', JSON.stringify(focalPoint));
+
+    let breakpoints = this.state.breakpoints;
+    let multipliers = this.state.multipliers;
+    let sizes = [];
+
+    for(let i = 1; i < breakpoints.length; i++) {
+      sizes.push({
+        name: breakpoints[i].name,
+        width: breakpoints[i].image.width,
+        height: breakpoints[i].image.height,
+      });
+
+      for(let j = 1; j < multipliers.length; j++) {
+        sizes.push({
+          name: breakpoints[i].name+'@'+multipliers[j].name,
+          width: multipliers[j].value*breakpoints[i].image.width,
+          height: multipliers[j].value*breakpoints[i].image.height,
+        });
+      }
+    }
+
+    data.append('sizes', JSON.stringify(sizes));
+
+    fetch('/image-export',{
+      method: 'post',
+      body: data,
+    }).then(response => {
+      return response.text();
+    }).then((url) => {
+      let downloads = this.state.downloads;
+      downloads.imageExport = url;
+
+      this.setState({downloads: downloads});
+    }).catch(console.log);
+  }
+
+  removeDownload(name) {
+    let downloads = this.state.downloads;
+    downloads[name] = null;
+
+    this.setState({downloads: downloads});
+  }
+
   render() {
     return (
       <article id="main" className="main">
@@ -315,6 +365,7 @@ export default class App extends Component {
                      multipliers={this.state.multipliers}
                      breakpointList={this.state.breakpointList}
                      calculationMode={this.state.calculationMode}
+                     downloads={this.state.downloads}
                      callbacks={{
                        breakpointChange: this.onChangeImageSelectBreakpoint.bind(this),
                        calcChange: this.onChangeCalculation.bind(this),
@@ -324,6 +375,8 @@ export default class App extends Component {
                        multiplierUpdate: this.multiplierUpdate.bind(this),
                        imageStyleShownChange: this.onChangeImageStyleShown.bind(this),
                        exportCSV: this.exportCSV.bind(this),
+                       uploadImage: this.uploadImage.bind(this),
+                       removeDownload: this.removeDownload.bind(this),
                      }}
           />
           <OutputTable breakpoints={this.state.breakpoints}

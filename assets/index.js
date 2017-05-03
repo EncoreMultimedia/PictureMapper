@@ -122,7 +122,7 @@ const imageSizes = [
 //Base multipliers for default settings
 const multipliers = [
   {
-    header: ['multipliers','Name', 'Value'],
+    header: ['multipliers','Resolution', 'Multiplier'],
   },
   {
     id: 0,

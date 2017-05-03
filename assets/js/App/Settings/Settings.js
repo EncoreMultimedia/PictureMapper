@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import PropTypes from 'prop-types';
 import SystemTable from './SystemTable';
 import HelpCenter from '../HelpCenter/HelpCenter';
+import ImageExport from './ImageExport';
 
 export default class Settings extends Component{
 
@@ -64,6 +65,8 @@ export default class Settings extends Component{
             <button className="btn-setting button secondary" onClick={() => this.props.callbacks.exportCSV()}>Export</button>
           </div>}
 
+          {this.state.exportPanel == 'image' && <ImageExport uploadImage={this.props.callbacks.uploadImage} exportDownload={this.props.downloads.imageExport} removeDownload={this.props.callbacks.removeDownload} />}
+
         </section>
       </section>
     );
@@ -76,5 +79,6 @@ Settings.propTypes = {
   multipliers: PropTypes.arrayOf(PropTypes.object),
   breakpointList: PropTypes.array,
   calculationMode: PropTypes.string,
+  downloads: PropTypes.object,
   callbacks: PropTypes.objectOf(PropTypes.func),
 };

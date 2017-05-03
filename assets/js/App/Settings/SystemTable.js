@@ -20,7 +20,7 @@ export default class SystemTable extends Component {
         document.getElementById('name-bp-' + id).defaultValue = e.target.value;
         this.props.callbacks.breakpointUpdate(e, property, id);
       }
-      if(property === 'width' && e.target.value !== e.target.def+aultValue) {
+      if(property === 'width' && e.target.value !== e.target.defaultValue) {
         document.getElementById('width-bp-' + id).defaultValue = e.target.value;
         this.props.callbacks.breakpointUpdate(e, property, id);
       }
