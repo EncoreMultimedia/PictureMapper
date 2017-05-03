@@ -10,8 +10,11 @@ export default class App extends Component {
     super(props);
     this.state = {
       breakpoints:  this.props.breakpoints,
+      breakpointCounter: this.props.breakpoints.length - 1,
       imageSizes:   this.props.imageSizes,
+      imageSizesCounter: this.props.imageSizes.length - 1,
       multipliers:  this.props.multipliers,
+      multipliersCounter: this.props.multipliers.length - 1,
       breakpointList: this.createBreakpointList(this.props.breakpoints),
       calculationMode: 'percentage',
       imageStyleShown: false,
@@ -56,6 +59,34 @@ export default class App extends Component {
     }
   }
 
+  addBreakpoint(name, width) {
+    let breakpoints = this.state.breakpoints;
+    //add new object
+    breakpoints.push({
+      id: this.state.breakpointCounter,
+      name: name,
+      width: width,
+      image: {
+        width: 0,
+        height: 0,
+      },
+      style: 'focal_point_scale_and_crop',
+    });
+    breakpoints = this.sortByWidth(breakpoints);
+    this.setState({breakpoints: breakpoints,breakpointCounter: this.state.breakpointCounter + 1, breakpointList: this.createBreakpointList(breakpoints)});
+    this.setImageSizes();
+  }
+
+  deleteBreakpoint(id) {
+    let breakpoints = this.state.breakpoints;
+    for(let i = 1; i < breakpoints.length; i++) {
+      if(parseInt(id) === parseInt(breakpoints[i].id)) {
+        breakpoints.splice(i, 1);
+        this.setState({breakpoints: breakpoints, breakpointList: this.createBreakpointList(breakpoints)});
+      }
+    }
+  }
+
   imageSizeUpdate(value, changedElement, imageSizeId) {
     let imageSizes = this.state.imageSizes;
 
@@ -78,6 +109,30 @@ export default class App extends Component {
 
   }
 
+  addImageSize(width, height) {
+    let imageSizes = this.state.imageSizes;
+    //add new object
+    imageSizes.push({
+      id: this.state.imageSizesCounter,
+      points: [width,height],
+      breakpoint: this.state.breakpoints[1].name,
+      size: '100vw',
+    });
+    imageSizes = this.sortByWidth(imageSizes);
+    this.setState({imageSizes: imageSizes,imageSizesCounter: this.state.imageSizesCounter + 1});
+    this.setImageSizes();
+  }
+
+  deleteImageSize(id) {
+    let imageSizes = this.state.imageSizes;
+    for(let i = 1; i < imageSizes.length; i++) {
+      if(parseInt(id) === parseInt(imageSizes[i].id)) {
+        imageSizes.splice(i, 1);
+        this.setState({imageSizes: imageSizes});
+      }
+    }
+  }
+
   multiplierUpdate(value, changedInput, id) {
     console.log(changedInput);
     let multipliers = this.state.multipliers;
@@ -93,6 +148,29 @@ export default class App extends Component {
 
     this.setState({multipliers: multipliers});
     this.setImageSizes();
+  }
+
+  addMultiplier(name, value) {
+    let multipliers = this.state.multipliers;
+    //add new object
+    multipliers.push(  {
+      id: this.state.multipliersCounter,
+      name: name,
+      value: value,
+    });
+
+    this.setState({multipliers: multipliers,multipliersCounter: this.state.multipliersCounter + 1});
+    this.setImageSizes();
+  }
+
+  deleteMultiplier(id) {
+    let multipliers = this.state.multipliers;
+    for(let i = 1; i < multipliers.length; i++) {
+      if(parseInt(id) === parseInt(multipliers[i].id)) {
+        multipliers.splice(i, 1);
+        this.setState({multipliers: multipliers});
+      }
+    }
   }
 
   sortByWidth(arr) {
@@ -324,6 +402,12 @@ export default class App extends Component {
                        multiplierUpdate: this.multiplierUpdate.bind(this),
                        imageStyleShownChange: this.onChangeImageStyleShown.bind(this),
                        exportCSV: this.exportCSV.bind(this),
+                       addBreakpoint: this.addBreakpoint.bind(this),
+                       deleteBreakpoint: this.deleteBreakpoint.bind(this),
+                       addImageSize: this.addImageSize.bind(this),
+                       deleteImageSize: this.deleteImageSize.bind(this),
+                       addMultiplier: this.addMultiplier.bind(this),
+                       deleteMultiplier: this.deleteMultiplier.bind(this),
                      }}
           />
           <OutputTable breakpoints={this.state.breakpoints}

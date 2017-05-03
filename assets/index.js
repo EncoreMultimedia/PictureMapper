@@ -10,10 +10,8 @@ const breakpoints = [
   },
   {
     id: 0,
-    name: 'small',
+    name: 'Yoda Max',
     width: 460,
-    aspectRatio: 0,
-    multipliers: [],
     image: {
       width: 320,
       height: 181,
@@ -24,8 +22,6 @@ const breakpoints = [
     id: 1,
     name: 'Yoda',
     width: 680,
-    aspectRatio: 0,
-    multipliers: [],
     image: {
       width: 0,
       height: 0,
@@ -36,8 +32,6 @@ const breakpoints = [
     id: 2,
     name: 'Ewok',
     width: 760,
-    aspectRatio: 0,
-    multipliers: [],
     image: {
       width: 0,
       height: 0,
@@ -48,8 +42,6 @@ const breakpoints = [
     id: 3,
     name: 'Luke',
     width: 860,
-    aspectRatio: 0,
-    multipliers: [],
     image: {
       width: 0,
       height: 0,
@@ -60,8 +52,6 @@ const breakpoints = [
     id: 4,
     name: 'Vader',
     width: 1000,
-    aspectRatio: 0,
-    multipliers: [],
     image: {
       width: 0,
       height: 0,
@@ -72,8 +62,6 @@ const breakpoints = [
     id: 5,
     name: 'Jabba',
     width: 1200,
-    aspectRatio: 0,
-    multipliers: [],
     image: {
       width: 0,
       height: 0,
@@ -84,8 +72,6 @@ const breakpoints = [
     id: 6,
     name: 'ATAT',
     width: 1500,
-    aspectRatio: 0,
-    multipliers: [],
     image: {
       width: 0,
       height: 0,

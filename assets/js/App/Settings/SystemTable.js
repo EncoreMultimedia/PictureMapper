@@ -20,13 +20,26 @@ export default class SystemTable extends Component {
         document.getElementById('name-bp-' + id).defaultValue = e.target.value;
         this.props.callbacks.breakpointUpdate(e, property, id);
       }
-      if(property === 'width' && e.target.value !== e.target.def+aultValue) {
+      if(property === 'width' && e.target.value !== e.target.defaultValue) {
         document.getElementById('width-bp-' + id).defaultValue = e.target.value;
         this.props.callbacks.breakpointUpdate(e, property, id);
       }
     } else {
       document.getElementById('name-bp-' + id).setAttribute('value', e.target.value);
     }
+  }
+
+  addBreakpoint() {
+    //get name and width value
+    let name = document.getElementById('add-bp-name').value;
+    let width = document.getElementById('add-bp-width').value;
+    //check if name is blank and width is greater than 0
+    if(name.trim() !== '' &&  width > 0 ) {
+      this.props.callbacks.addBreakpoint(name, width);
+    }
+    //reset fields to nothing
+    document.getElementById('add-bp-name').value = '';
+    document.getElementById('add-bp-width').value = '';
   }
 
   buildBreakpoints(tableValues) {
@@ -42,6 +55,7 @@ export default class SystemTable extends Component {
                                   <td>
                                     <input id={'width-bp-' + rowData.id} type="number" onBlur={(e)=>this.onBlurBreakpoint(e, 'width', rowData.id)} defaultValue={parseInt(rowData.width, 10)} />
                                   </td>
+                                  <td><button onClick={()=>this.props.callbacks.deleteBreakpoint(rowData.id)} className="button alert tooltip">x<span className="tooltiptext">Delete {rowData.name} Breakpoint</span></button></td>
                                 </tr>
       );
     });
@@ -53,6 +67,11 @@ export default class SystemTable extends Component {
         </thead>
         <tbody>
           {tableBody}
+          <tr>
+            <td><input id="add-bp-name" type="text" /></td>
+            <td><input type="number" id="add-bp-width" /></td>
+            <td><button onClick={()=>this.addBreakpoint()} className="button success tooltip">+<span className="tooltiptext">Add Breakpoint</span></button></td>
+          </tr>
         </tbody>
       </table>
     );
@@ -75,9 +94,9 @@ export default class SystemTable extends Component {
     // add the table headings
     const tableHeadings = (
       <tr>
-        <th width='80' >{tableValues[0].header[2]}</th>
-        <th width='80'>{tableValues[0].header[3]}</th>
-        <th>Breakpoint</th>
+        <th width={this.props.calculationMode === 'calculation' ? '100' : '120'} >{tableValues[0].header[2]}</th>
+        <th width={this.props.calculationMode === 'calculation' ? '100' : '120'}>{tableValues[0].header[3]}</th>
+        <th width={this.props.calculationMode === 'calculation' ? '' : '200'}>Breakpoint</th>
         {this.props.calculationMode === 'calculation' ? <th>Calc</th> : null}
       </tr>
     );
@@ -88,10 +107,11 @@ export default class SystemTable extends Component {
       });
       return (
         rowData.header ? null : <tr key={rowData.id + 'imageSizes'}>
-                                  <td><input id={'width-is-' + rowData.id} defaultValue={rowData.points[0]} onBlur={(e)=>this.onBlurImageSize(e, 'width', rowData.id)} /></td>
-                                  <td><input id={'height-is-' + rowData.id} defaultValue={rowData.points[1]} onBlur={(e)=>this.onBlurImageSize(e, 'height', rowData.id)} /></td>
+                                  <td><input id={'width-is-' + rowData.id} type="number" defaultValue={rowData.points[0]} onBlur={(e)=>this.onBlurImageSize(e, 'width', rowData.id)} /></td>
+                                  <td><input id={'height-is-' + rowData.id} type="number" defaultValue={rowData.points[1]} onBlur={(e)=>this.onBlurImageSize(e, 'height', rowData.id)} /></td>
                                   <td><select onChange={(e)=>this.onChangeList(e, rowData.id)} value={rowData.breakpoint ? rowData.breakpoint : ''}>{list}</select></td>
                                   {this.props.calculationMode === 'calculation' ? <td><input type="text" onChange={(e)=>this.calcChange(e, rowData.id)} defaultValue={rowData.size} /></td> : null}
+                                  <td><button onClick={()=>this.props.callbacks.deleteImageSize(rowData.id)} className="button alert tooltip">x<span className="tooltiptext">Delete {rowData.points[0]} width Image Size</span></button></td>
                                 </tr>
       );
     });
@@ -99,9 +119,9 @@ export default class SystemTable extends Component {
     return(
       <section>
         <fieldset onChange={(e)=>this.radioChange(e)}>
-          <input type="radio" name="image-mode" value={'percentage'} id="percentage" defaultChecked={true} />
+          <input type="radio" name="image-mode" value={'percentage'} id="percentage" defaultChecked={this.props.calculationMode !== 'calculation'} />
           <label htmlFor="percentage">Percentage Based</label>
-          <input type="radio" name="image-mode" value={'calculation'} id="calculation" />
+          <input type="radio" name="image-mode" value={'calculation'} id="calculation" defaultChecked={this.props.calculationMode === 'calculation'} />
           <label htmlFor="calculation">Calculation Based</label>
         </fieldset>
         <table className="stack settings">
@@ -110,11 +130,28 @@ export default class SystemTable extends Component {
           </thead>
           <tbody>
           {tableBody}
+          <tr>
+            <td><input id="add-is-width" type="number" defaultValue={''}/></td>
+            <td><input id="add-is-height" type="number" defaultValue={''}/></td>
+            <td width={'20'}><button onClick={()=>this.addImageSize()} className="button success tooltip">+<span className="tooltiptext">Add Image Size</span></button></td>
+          </tr>
           </tbody>
         </table>
       </section>
-
     );
+  }
+
+  addImageSize() {
+    //get name and width value
+    let width = document.getElementById('add-is-width').value;
+    let height = document.getElementById('add-is-height').value;
+    //check if name is blank and width is greater than 0
+    if(height > 0 &&  width > 0 ) {
+      this.props.callbacks.addImageSize(width, height);
+    }
+    //reset fields to nothing
+    document.getElementById('add-is-width').value = '';
+    document.getElementById('add-is-height').value = '';
   }
 
   radioChange(e) {
@@ -147,8 +184,9 @@ export default class SystemTable extends Component {
     const tableBody = this.props.tableValue.map((rowData) => {
       return (
         rowData.header ? null : <tr key={rowData.id}>
-                                  <td><input id={'multi-name-'+rowData.id} onBlur={(e)=>this.onChangeMultiplier(e, 'name', rowData.id)} defaultValue={rowData.name}/></td>
-                                  <td><input id={'multi-value-'+rowData.id} onBlur={(e)=>this.onChangeMultiplier(e, 'value', rowData.id)} defaultValue={rowData.value}/></td>
+                                  <td><input id={'multi-name-'+rowData.id} type="text" onBlur={(e)=>this.onChangeMultiplier(e, 'name', rowData.id)} defaultValue={rowData.name}/></td>
+                                  <td><input id={'multi-value-'+rowData.id} type="number" onBlur={(e)=>this.onChangeMultiplier(e, 'value', rowData.id)} defaultValue={rowData.value}/></td>
+                                  <td><button onClick={()=>this.props.callbacks.deleteMultiplier(rowData.id)} className="button alert tooltip">x<span className="tooltiptext">Delete {rowData.name} Multiplier</span></button></td>
                                 </tr>
       );
     });
@@ -160,9 +198,27 @@ export default class SystemTable extends Component {
         </thead>
         <tbody>
           {tableBody}
+          <tr>
+            <td><input id="add-mp-name" type="text"  defaultValue={''}/></td>
+            <td><input id="add-mp-value" type="number" defaultValue={''}/></td>
+            <td><button onClick={()=>this.addMultiplier()} className="button success tooltip">+<span className="tooltiptext">Add Multiplier</span></button></td>
+          </tr>
         </tbody>
       </table>
     );
+  }
+
+  addMultiplier() {
+    //get name and width value
+    let name = document.getElementById('add-mp-name').value;
+    let value = document.getElementById('add-mp-value').value;
+    //check if name is blank and width is greater than 0
+    if(name.trim() !== '' &&  value > 0 ) {
+      this.props.callbacks.addMultiplier(name, value);
+    }
+    //reset fields to nothing
+    document.getElementById('add-mp-name').value = '';
+    document.getElementById('add-mp-value').value = '';
   }
 
   render() {

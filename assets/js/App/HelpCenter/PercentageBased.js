@@ -11,7 +11,8 @@ export default class PercentageBased extends Component {
         </button>
         <header><h2>Percentage Based</h2></header>
         <article>
-          <p>Lorem ipsum dolor sit amet, mel te civibus fierent temporibus, oratio voluptaria ei sed. Omnesque repudiare deseruisse nam ex, erant minimum vel et. Ex summo choro interesset pri, an liber volutpat necessitatibus eos. No qui error tritani. Vel autem inani decore ea, fuisset qualisque dissentiunt te his.</p>
+          <p>Using this system in percentage based mode takes your image sizes then calculates the percentage of the space they take up from the associated breakpoint.  The application will assign image values to your breakpoints based on the associated breakpoints on image sizes that are inputted.  It is possible to have slight variance in the applications assigned widths. If you desire more accurate results add more image sizes.
+          </p>
         </article>
       </section>
     );
