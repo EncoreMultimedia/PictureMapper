@@ -11,6 +11,13 @@ exports.loadCSS = function({ include, exclude } = {}) {
 
           use: ['style-loader', 'css-loader', 'sass-loader'],
         },
+        {
+          test: /\.css$/,
+          include,
+          exclude,
+
+          use: ['style-loader', 'css-loader'],
+        },
       ],
     },
   };
@@ -22,6 +29,16 @@ exports.extractCSS = function({ include, exclude, use }) {
       rules: [
         {
           test: /\.scss$/,
+          include,
+          exclude,
+
+          use: ExtractTextPlugin.extract({
+            use: use,
+            fallback: 'style-loader',
+          }),
+        },
+        {
+          test: /\.css$/,
           include,
           exclude,
 

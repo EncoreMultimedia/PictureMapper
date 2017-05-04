@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './js/App/App.js';
+import './foundation/css/foundation.css';
 import './sass/styles.scss';
 
 //Base breakpoints for default loading of pages.
