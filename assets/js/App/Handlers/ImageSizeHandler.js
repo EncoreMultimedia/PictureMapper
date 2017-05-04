@@ -1,3 +1,5 @@
+import findIndex from 'lodash/findIndex';
+
 export default class ImageSizeHandler {
   /**
    *
@@ -30,7 +32,7 @@ export default class ImageSizeHandler {
    * @param height
    * @returns {ImageSizeHandler}
    */
-  addImageSize(width, height) {
+  addImageSize(width, height, breakpointList) {
     this._imageSizes.push(
       {
         id: this.counter,
@@ -40,7 +42,7 @@ export default class ImageSizeHandler {
       }
     );
     this.counter++;
-    this._sort();
+    this._sort(breakpointList);
     return this;
   }
 
@@ -62,7 +64,6 @@ export default class ImageSizeHandler {
    */
   updateWidth(index, width) {
     this._imageSizes[index].points[0] = width;
-    this._sort();
     return this;
   }
 
@@ -83,8 +84,9 @@ export default class ImageSizeHandler {
    * @param breakpoint
    * @returns {ImageSizeHandler}
    */
-  updateBreakpoint(index, breakpoint) {
+  updateBreakpoint(index, breakpoint, breakpointList) {
     this.imageSizes[index].breakpoint = breakpoint;
+    this._sort(breakpointList);
     return this;
   }
 
@@ -92,9 +94,9 @@ export default class ImageSizeHandler {
    *
    * @private
    */
-  _sort() {
+  _sort(breakpointList) {
     this._imageSizes.sort((a,b)=>{
-      return parseInt(a.points[0]) - parseInt(b.points[0]);
+      return findIndex(breakpointList, (bp)=>bp.toLowerCase() == a.breakpoint) - findIndex(breakpointList, (bp)=>bp.toLowerCase() == b.breakpoint);
     });
   }
 }

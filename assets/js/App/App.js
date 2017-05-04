@@ -146,7 +146,7 @@ export default class App extends Component {
   addImageSize(width, height) {
     this.setState((prevState) => {
       return {
-        imageSizes: this.imageSizeHandler.addImageSize(width, height).imageSizes,
+        imageSizes: this.imageSizeHandler.addImageSize(width, height, prevState.breakpointList).imageSizes,
         breakpoints: this.breakpointsHandler.setImageSizes(this.imageSizeHandler.imageSizes, prevState.calculationMode).breakpoints,
       };
     });
@@ -236,14 +236,9 @@ export default class App extends Component {
    * @param id
    * @param value
    */
-  onChangeImageSelectBreakpoint (id, value) {
+  onChangeImageSelectBreakpoint (index, value) {
     this.setState((prevState) => {
-      let imageSizes = prevState.imageSizes;
-      for(let i = 1; i < imageSizes.length; i++) {
-        if(imageSizes[i].id === id) {
-          imageSizes[i].breakpoint = value.toString();
-        }
-      }
+      let imageSizes = this.imageSizeHandler.updateBreakpoint(index, value, prevState.breakpointList).imageSizes;
 
       return {
         imageSizes: imageSizes,
