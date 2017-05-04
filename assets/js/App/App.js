@@ -287,9 +287,9 @@ export default class App extends Component {
     let csv = [];
     csv.push('data:text/csv;charset=utf-8,' + ['Breakpoint', 'Width', 'Height', 'Multiplier', 'Style'].join(', '));
 
-    for(let i = 1; i < breakpoints.length-1; i++) {
+    for(let i = 0; i < breakpoints.length-1; i++) {
       csv.push([breakpoints[i].name, breakpoints[i].image.width, breakpoints[i].image.height, 1, breakpoints[i].style].join(', '));
-      for(let j = 1; j < multipliers.length; j++) {
+      for(let j = 0; j < multipliers.length; j++) {
         csv.push([breakpoints[i].name,
           multipliers[j].value*breakpoints[i].image.width,
           multipliers[j].value*breakpoints[i].image.height,
@@ -298,11 +298,11 @@ export default class App extends Component {
       }
     }
 
-    let csvString = encodeURI(csv.join("\n"));
+    let csvString = encodeURI(csv.join('\n'));
 
-    let link = document.createElement("a");
-    link.setAttribute("href", csvString);
-    link.setAttribute("download", "breakpoints.csv");
+    let link = document.createElement('a');
+    link.setAttribute('href', csvString);
+    link.setAttribute('download', 'breakpoints.csv');
     document.body.appendChild(link); // Required for FF
 
     link.click();
@@ -322,16 +322,16 @@ export default class App extends Component {
     let multipliers = this.state.multipliers;
     let sizes = [];
 
-    for(let i = 1; i < breakpoints.length-1; i++) {
+    for(let i = 0; i < breakpoints.length-1; i++) {
       sizes.push({
         name: breakpoints[i].name,
         width: breakpoints[i].image.width,
         height: breakpoints[i].image.height,
       });
 
-      for(let j = 1; j < multipliers.length; j++) {
+      for(let j = 0; j < multipliers.length; j++) {
         sizes.push({
-          name: breakpoints[i].name+'@'+multipliers[j].name,
+          name: breakpoints[i].name+'@'+multipliers[j].value,
           width: multipliers[j].value*breakpoints[i].image.width,
           height: multipliers[j].value*breakpoints[i].image.height,
         });

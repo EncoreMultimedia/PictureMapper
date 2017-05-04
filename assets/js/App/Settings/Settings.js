@@ -12,6 +12,7 @@ export default class Settings extends Component{
       tableValue: this.props.breakpoints,
       settingsPanel: 'breakpoints',
       exportPanel: false,
+      markup: '',
     };
   }
 
@@ -34,6 +35,67 @@ export default class Settings extends Component{
     }
 
     this.setState({exportPanel: value});
+  }
+
+  getPictureData() {
+    let breakpoints = this.props.breakpoints;
+    let multipliers = this.props.multipliers;
+    let ext = document.getElementById('ext').value;
+    let sources = [];
+
+    for(let i = 1; i < breakpoints.length-1; i++) {
+      let newSource  = {
+        media: '(min-width: ' + breakpoints[i].width + ')',
+        srcset: ['images/' + breakpoints[i].name + '.' + ext],
+      };
+
+      for(let j = 0; j < multipliers.length; j++) {
+        newSource.srcset.push('images/' + breakpoints[i].name+'@'+multipliers[j].value + '.' + ext + ' ' + multipliers[j].name + 'x');
+      }
+
+      sources.push(newSource);
+    }
+
+    sources.reverse();
+
+    let fallback = {
+      src: 'images/' + breakpoints[0].name + '.' + ext,
+      srcset: [],
+    };
+
+    for(let j = 0; j < multipliers.length; j++) {
+      fallback.srcset.push('images/' + breakpoints[0].name+'@'+multipliers[j].value + '.' + ext + ' ' + multipliers[j].name + 'x');
+    }
+
+    sources.push(fallback);
+
+    return sources;
+  }
+
+  generateMarkup() {
+    let sources = this.getPictureData();
+    let markup = '<picture>';
+
+    for(let i in sources) {
+      let source;
+      let media = sources[i].media;
+
+      if(typeof media !== 'undefined') {
+        source = '<source media="' + media + '" srcset="';
+      } else {
+        source = '<img alt="Alt Tag Here" src="' + sources[i].src + '" srcset="';
+      }
+
+      source += sources[i].srcset.join(', ');
+
+      source += '" />';
+
+      markup += source;
+    }
+
+    markup += '</picture>';
+
+    this.setState({markup: markup});
   }
 
   render() {
@@ -64,6 +126,12 @@ export default class Settings extends Component{
             </div>}
 
             {this.state.exportPanel == 'image' && <ImageExport uploadImage={this.props.callbacks.uploadImage} exportDownload={this.props.downloads.imageExport} removeDownload={this.props.callbacks.removeDownload} />}
+
+            {this.state.exportPanel == 'markup' && <div className="setting-wrapper">
+              <label>Extension: <input name="ext" id="ext" defaultValue="jpg" /></label>
+              <textarea value={this.state.markup} rows={10}></textarea>
+              <button className="btn-setting button secondary" onClick={() => this.generateMarkup()}>Generate Markup</button>
+            </div>}
           </div>
 
 
