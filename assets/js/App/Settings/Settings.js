@@ -10,7 +10,7 @@ export default class Settings extends Component{
     super(props);
     this.state = {
       tableValue: this.props.breakpoints,
-      settingsPanel: 'breakpoint',
+      settingsPanel: 'breakpoints',
       exportPanel: false,
     };
   }
@@ -42,13 +42,13 @@ export default class Settings extends Component{
         <HelpCenter/>
         <div className="setting-wrapper">
           <div className="setting-button-wrapper">
-            <button className={'btn-setting button' + (this.state.settingsPanel == 'breakpoint' ? ' active' : '')} onClick={() => this.onClickTableHandler('breakpoint')}>Breakpoints</button>
+            <button className={'btn-setting button' + (this.state.settingsPanel == 'breakpoints' ? ' active' : '')} onClick={() => this.onClickTableHandler('breakpoints')}>Breakpoints</button>
             <button className={'btn-setting button' + (this.state.settingsPanel == 'imageSizes' ? ' active' : '')} onClick={() => this.onClickTableHandler('imageSizes')}>Image Sizes</button>
             <button className={'btn-setting button' + (this.state.settingsPanel == 'multipliers' ? ' active' : '')} onClick={() => this.onClickTableHandler('multipliers')}>Multipliers</button>
           </div>
         </div>
         <section className="setting-systems">
-          <SystemTable tableValue={this.state.tableValue} breakpointList={this.props.breakpointList} calculationMode={this.props.calculationMode} callbacks={this.props.callbacks}/>
+          <SystemTable tableValue={this.state.tableValue} tableType={this.state.settingsPanel} breakpointList={this.props.breakpointList} calculationMode={this.props.calculationMode} callbacks={this.props.callbacks}/>
         </section>
         <section className="setting-export">
           <h3>Export</h3>

@@ -9,7 +9,7 @@ export default class SystemTable extends Component {
   }
 
   tablefy(tableValues) {
-    switch(tableValues[0].header[0]) {
+    switch(this.props.tableType) {
       case 'breakpoints': return this.buildBreakpoints(tableValues);
       case 'imageSizes':  return this.buildImageSizes(tableValues);
       case 'multipliers': return this.buildMultipliers(tableValues);
@@ -242,6 +242,7 @@ export default class SystemTable extends Component {
 
 SystemTable.propTypes = {
   tableValue: PropTypes.arrayOf(PropTypes.object),
+  tableType: PropTypes.string,
   breakpointList: PropTypes.array,
   calculationMode: PropTypes.string,
   callbacks: PropTypes.objectOf(PropTypes.func),
