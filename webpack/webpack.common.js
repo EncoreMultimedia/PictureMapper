@@ -1,7 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
-const NyanProgressPlugin = require('nyan-progress-webpack-plugin');
 const glob = require('glob');
 const css = require('./parts/css');
 const js = require('./parts/js');
@@ -20,16 +19,7 @@ module.exports = merge([
       publicPath: '/',
     },
     plugins: [
-      new NyanProgressPlugin(),
       new webpack.HotModuleReplacementPlugin(),
-      new webpack.optimize.OccurrenceOrderPlugin(),
-      new webpack.NoEmitOnErrorsPlugin(),
-      new webpack.DefinePlugin({
-        'process.env': {
-          NODE_ENV: JSON.stringify('development'),
-          WEBPACK: true,
-        },
-      }),
     ],
   },
   css.lintCSS({include: '/../assets/'}),

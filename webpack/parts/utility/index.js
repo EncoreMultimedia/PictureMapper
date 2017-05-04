@@ -24,18 +24,6 @@ exports.minifyJavaScript = function({ useSourceMap }) {
     plugins: [
       new webpack.optimize.UglifyJsPlugin({
         sourceMap: useSourceMap,
-        beautify: true,
-        comments: true,
-        compress: {
-          warnings: false,
-          drop_console: true,
-        },
-        // Mangling specific options
-        mangle: {
-          except: ['$'], // Don't mangle $
-          screw_ie8 : true, // Don't care about IE8
-          keep_fnames: true, // Don't mangle function names
-        },
       }),
     ],
   };

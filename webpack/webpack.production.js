@@ -38,10 +38,18 @@ module.exports = merge([
       publicPath: PUBLIC.root,
     },
 
+    plugins: [
+      new webpack.DefinePlugin({
+        'process.env': {
+          NODE_ENV: JSON.stringify('production'),
+        },
+      }),
+    ],
+
   },
 
   util.clean('public'),
-  //util.minifyJavaScript({useSourceMap: true}),
+  util.minifyJavaScript(false),
   util.minifyCSS({
     options: {
       discardComments: {
