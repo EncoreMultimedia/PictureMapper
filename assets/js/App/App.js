@@ -281,81 +281,85 @@ export default class App extends Component {
    * that will then use the corresponding breakpoint to decide what the height will be using the aspect ratio.
    */
   setImageSizes() {
-    let imageSize = this.state.imageSizes;
+    let imageSizes = this.state.imageSizes;
     let breakpoints = this.state.breakpoints;
     let imageBreakpointList = [];
     //Array of the image sizes referencing it breakpoints widths.
 
-    let stopPoint = [];
+    let stopPoints = [];
 
     //load image breakpoints
-    for(let i = 1; i < imageSize.length; i++) {
-      if(imageSize[i].breakpoint) {
-        imageBreakpointList.push(imageSize[i].breakpoint);
+    for(let i = 0; i < imageSizes.length; i++) {
+      if(imageSizes[i].breakpoint) {
+        imageBreakpointList.push(imageSizes[i].breakpoint);
       }
     }
 
+    console.log(imageBreakpointList);
+
     //load the stopping points
-    for(let i = 0; i < this.state.breakpointList.length; i++) {
+    for(let i = 0; i < breakpoints.length; i++) {
       for(let j = 0; j < imageBreakpointList.length; j++) {
-        if (imageBreakpointList[j] === this.state.breakpointList[i].toLowerCase()) {
-          stopPoint.push(i);
+        if (imageBreakpointList[j] === breakpoints[i].name.toLowerCase()) {
+          stopPoints.push(i);
         }
       }
     }
 
+    console.log(stopPoints);
+
     //loop through the stop points array and decide if it first or last and handle them differently then the common cases.
-    for(let i = 0; i < stopPoint.length; i++) {
+    for(let i = 0; i < stopPoints.length; i++) {
       //check if it is the first element
-      if (typeof stopPoint[i - 1] === 'undefined') {
-        let containerWidth = breakpoints[stopPoint[i]+2].width;
+      if (typeof stopPoints[i - 1] === 'undefined') {
+        let containerWidth = breakpoints[stopPoints[i]+1].width;
         let j = 0;
 
-        let stopBreakpoint = stopPoint[i + 1];
+        let stopBreakpoint = stopPoints[i + 1];
         if(typeof stopBreakpoint == 'undefined')
-          stopBreakpoint = breakpoints.length-2;
+          stopBreakpoint = breakpoints.length-1;
 
         while(j !== stopBreakpoint) {
 
           if(this.state.calculationMode === 'percentage') {
-            breakpoints[j+1].image.width = this.calculateImageWidthByPercentage(imageSize[i + 1].points[0], containerWidth, breakpoints[j+2].width);
+            breakpoints[j].image.width = this.calculateImageWidthByPercentage(imageSizes[i].points[0], containerWidth, breakpoints[j+1].width);
           } else if(this.state.calculationMode === 'calculation') {
-            breakpoints[j+1].image.width = this.calculateImageWidthByCalc(breakpoints[j+2].width, imageSize[i+1].size);
+            breakpoints[j].image.width = this.calculateImageWidthByCalc(breakpoints[j+1].width, imageSizes[i].size);
           }
 
-          breakpoints[j+1].image.height = this.calculateImageHeightLinear(imageSize[i + 1].points[0] / imageSize[i + 1].points[1], breakpoints[j+1].image.width);
+          breakpoints[j].image.height = this.calculateImageHeightLinear(imageSizes[i].points[0] / imageSizes[i].points[1], breakpoints[j].image.width);
 
           j++;
         }
         //Check to see if last element in the array.
-      } else if (typeof stopPoint[i + 1] === 'undefined' ) {
-        let containerWidth = breakpoints[stopPoint[i]+2].width;
-        let j = stopPoint[i];
-        while (j < breakpoints.length - 2) {
+      } else if (typeof stopPoints[i + 1] === 'undefined' ) {
+        let containerWidth = breakpoints[stopPoints[i]+1].width;
+        let j = stopPoints[i];
+        while (j < breakpoints.length - 1) {
 
           if(this.state.calculationMode === 'percentage') {
-            breakpoints[j+1].image.width = this.calculateImageWidthByPercentage(imageSize[i + 1].points[0], containerWidth, breakpoints[j+2].width);
+            breakpoints[j].image.width = this.calculateImageWidthByPercentage(imageSizes[i].points[0], containerWidth, breakpoints[j+1].width);
           } else if(this.state.calculationMode === 'calculation') {
-            breakpoints[j+1].image.width = this.calculateImageWidthByCalc(breakpoints[j+2].width, imageSize[i+1].size);
+            breakpoints[j].image.width = this.calculateImageWidthByCalc(breakpoints[j+1].width, imageSizes[i].size);
           }
 
-          breakpoints[j+1].image.height = this.calculateImageHeightLinear(imageSize[i + 1].points[0] / imageSize[i + 1].points[1], breakpoints[j+1].image.width);
+          breakpoints[j].image.height = this.calculateImageHeightLinear(imageSizes[i].points[0] / imageSizes[i].points[1], breakpoints[j].image.width);
 
           j++;
         }
         //if not first or last element handle all common cases.
       } else {
-        let containerWidth = breakpoints[stopPoint[i]+2].width;
-        let j = stopPoint[i];
-        while ( j !== stopPoint[i + 1]) {
+        let containerWidth = breakpoints[stopPoints[i]+1].width;
+        let j = stopPoints[i];
+        while ( j !== stopPoints[i+1]) {
 
           if(this.state.calculationMode === 'percentage') {
-            breakpoints[j+1].image.width = this.calculateImageWidthByPercentage(imageSize[i + 1].points[0], containerWidth, breakpoints[j+2].width);
+            breakpoints[j].image.width = this.calculateImageWidthByPercentage(imageSizes[i].points[0], containerWidth, breakpoints[j+1].width);
           } else if(this.state.calculationMode === 'calculation') {
-            breakpoints[j+1].image.width = this.calculateImageWidthByCalc(breakpoints[j+2].width, imageSize[i+1].size);
+            breakpoints[j].image.width = this.calculateImageWidthByCalc(breakpoints[j+1].width, imageSizes[i].size);
           }
 
-          breakpoints[j+1].image.height = this.calculateImageHeightLinear(imageSize[i + 1].points[0] / imageSize[i + 1].points[1], breakpoints[j+1].image.width);
+          breakpoints[j].image.height = this.calculateImageHeightLinear(imageSizes[i].points[0] / imageSizes[i].points[1], breakpoints[j].image.width);
 
           j++;
 
