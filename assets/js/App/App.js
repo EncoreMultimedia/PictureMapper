@@ -355,7 +355,6 @@ export default class App extends Component {
       }
     }
     //set the breakpoint that where changed to the state.
-
     this.setState({breakpoints: breakpoints});
   }
   //get the image width two decimal places
