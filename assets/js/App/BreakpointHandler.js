@@ -69,7 +69,8 @@ export default class BreakpointHandler {
 
   //updateStyle
   updateStyleOption(index, styleOption) {
-    this._breakpoints['index'].style = styleOption;
+    this._breakpoints[index].style = styleOption;
+    return this;
   }
 
 }

@@ -116,6 +116,10 @@ export default class App extends Component {
     // }
   }
 
+  onChangeBreakpointImageStyle(index, value) {
+    this.setState({breakpoints: this.breakpointsHandler.updateStyleOption(index, value).breakpoints});
+  }
+
   imageSizeUpdate(value, property, imageSizeId) {
     let imageSizes = this.state.imageSizes;
 
@@ -221,18 +225,6 @@ export default class App extends Component {
     return arr;
   }
 
-  reIdObjects() {
-    let arr = this.state.breakpoints;
-    console.log(arr);
-    for(let i = 0; i < arr.length; i++) {
-      if(!arr[i].header) {
-        arr[i].id = parseInt(i - 1);
-        console.log(arr[i]);
-      }
-    }
-    this.setState({breakpoints: arr});
-  }
-
   createBreakpointList(breakpoints) {
     let breakpointList = [];
     //Push breakpoint name onto breakpointList
@@ -265,15 +257,7 @@ export default class App extends Component {
   }
 
 
-  onChangeBreakpointImageStyle(id, value) {
-    let breakpoints = this.state.breakpoints;
-    for(let i = 1; i < breakpoints.length; i++) {
-      if(breakpoints[i].id === id) {
-        breakpoints[i].style = value;
-      }
-    }
-    this.setState({breakpoints: breakpoints});
-  }
+
 
   onChangeImageStyleShown(value) {
     this.setState({imageStyleShown: value});

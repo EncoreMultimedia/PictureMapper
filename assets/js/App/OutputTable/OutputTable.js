@@ -16,7 +16,7 @@ export default class OutputTable extends Component{
     breakpointList.splice(-1, 1);
 
 
-    const breakpoints = breakpointList.map((breakpoint)=>{
+    const breakpoints = breakpointList.map((breakpoint, index)=>{
       const multipliers = this.props.multipliers.map((multiplier)=>{
         return (
           multiplier.value?
@@ -40,7 +40,7 @@ export default class OutputTable extends Component{
             <td>{breakpoint.image ? Math.round(Math.floor(breakpoint.image.width) / Math.floor(breakpoint.image.height) * 100) / 100 : null }</td>
             { this.props.imageStyleShown &&
             <td rowSpan={multipliers.length}>
-              <select onChange={(e)=>this.props.breakpointStyleChange(breakpoint.id, e.target.value)} defaultValue={breakpoint.style}>{styleOptions}</select>
+              <select onChange={(e)=>this.props.breakpointStyleChange(index, e.target.value)} defaultValue={breakpoint.style}>{styleOptions}</select>
             </td>}
           </tr>
           {multipliers}
