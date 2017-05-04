@@ -11,7 +11,8 @@ export default class CalculationBased extends Component {
         </button>
         <header><h2>Calculation Based</h2></header>
         <article>
-          <p>Lorem ipsum dolor sit amet, mel te civibus fierent temporibus, oratio voluptaria ei sed. Omnesque repudiare deseruisse nam ex, erant minimum vel et. Ex summo choro interesset pri, an liber volutpat necessitatibus eos. No qui error tritani. Vel autem inani decore ea, fuisset qualisque dissentiunt te his.</p>
+          <p> This system offers you the ability to have an accurate calculation of your image size widths. You can consider other elements that play a factor on your image size, such as, padding, margin and surrounding elements. This is limited to only using math that the css calc() function allows.
+          </p>
         </article>
       </section>
     );
