@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Settings from './Settings/Settings';
 import OutputTable from './OutputTable/OutputTable';
-import BreakpointHandler from './handlers/BreakpointHandler';
+import BreakpointHandler from './Handlers/BreakpointHandler';
 
 export default class App extends Component {
 
