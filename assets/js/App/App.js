@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Settings from './Settings/Settings';
 import OutputTable from './OutputTable/OutputTable';
 import BreakpointHandler from './Handlers/BreakpointHandler';
+import MultipliersHandler from './Handlers/MultipliersHandler';
 
 export default class App extends Component {
 
@@ -10,7 +11,7 @@ export default class App extends Component {
     super(props);
 
     this.breakpointsHandler =  new BreakpointHandler(this.props.breakpoints);
-
+    this.multiplierHandler = new MultipliersHandler(this.props.multipliers);
     // Set Image Sizes
     this.breakpointsHandler.setImageSizes(this.props.imageSizes, 'percentage');
 
@@ -150,38 +151,27 @@ export default class App extends Component {
   }
 
   multiplierUpdate(property,index, value) {
-    let multipliers = this.state.multipliers;
 
-    if(property === 'name' && parseInt(index, 10) === parseInt(multipliers[i].id)) {
-      multipliers[i].name = value;
+    if(property === 'name') {
+      this.setState((prevState) => {
+        return {multipliers: this.multiplierHandler.updateResolution(index, value).multipliers};
+      });
     }
-    if(property === 'value' && parseInt(index, 10) === parseInt(multipliers[i].id)) {
-      multipliers[i].value = value;
+    if(property === 'value') {
+      this.setState((prevState) => {
+        return{
+          multipliers: this.multiplierHandler.updateMultiplier(index, value).multipliers,
+          breakpoints: this.breakpointsHandler.setImageSizes(prevState.imageSizes, prevState.calculationMode).breakpoints};
+      });
     }
-
-    this.setState({multipliers: multipliers});
   }
 
-  addMultiplier(name, value) {
-    let multipliers = this.state.multipliers;
-    //add new object
-    multipliers.push(  {
-      id: this.state.multipliersCounter,
-      name: name,
-      value: value,
-    });
-
-    this.setState({multipliers: multipliers,multipliersCounter: this.state.multipliersCounter + 1});
+  addMultiplier(resolution, multiplier) {
+    this.setState({multipliers: this.multiplierHandler.addMultiplier(resolution, multiplier).multipliers});
   }
 
-  deleteMultiplier(id) {
-    let multipliers = this.state.multipliers;
-    for(let i = 1; i < multipliers.length; i++) {
-      if(parseInt(id) === parseInt(multipliers[i].id)) {
-        multipliers.splice(i, 1);
-        this.setState({multipliers: multipliers});
-      }
-    }
+  deleteMultiplier(index) {
+    this.setState({multipliers: this.multiplierHandler.deleteMultiplier(index).multipliers});
   }
 
   sortByImageWidth(arr) {

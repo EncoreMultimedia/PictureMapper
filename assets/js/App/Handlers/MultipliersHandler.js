@@ -1,6 +1,7 @@
 export default class MultipliersHandler {
   constructor(multipliers) {
     this._multipliers = multipliers;
+    this.counter = multipliers.length;
   }
 
   get multipliers() {
@@ -18,11 +19,12 @@ export default class MultipliersHandler {
   addMultiplier(resolution, multiplier) {
     this._multipliers.push(
       {
+        id: this.counter,
         name: resolution,
         value: multiplier,
       }
     );
-
+    this.counter++;
     this._sortMultipliers();
     return this;
   }
