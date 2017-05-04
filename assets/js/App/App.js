@@ -228,7 +228,7 @@ export default class App extends Component {
   onChangeCalculation(id, value) {
     this.setState((prevState) => {
       let imageSizes = prevState.imageSizes;
-      imageSizes[id +1].size = value.toString();
+      imageSizes[id].size = value.toString();
 
       return {
         imageSizes: imageSizes,

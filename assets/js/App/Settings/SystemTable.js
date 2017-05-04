@@ -90,12 +90,7 @@ export default class SystemTable extends Component {
 
   onBlurImageSize(e, property, id) {
     if(e.target.value.trim() !== '') {
-      if(property === 'width' && e.target.value !== e.target.defaultValue) {
-        document.getElementById('width-is-' + id).defaultValue = e.target.value;
-        this.props.callbacks.imageSizeUpdate(e, property, id);
-      }
-      if(property === 'height' && e.target.value !== e.target.defaultValue) {
-        document.getElementById('height-is-' + id).defaultValue = e.target.value;
+      if(e.target.value !== e.target.defaultValue) {
         this.props.callbacks.imageSizeUpdate(e, property, id);
       }
     }
@@ -125,7 +120,7 @@ export default class SystemTable extends Component {
                                   <td><input id={'width-is-' + rowData.id} type="number" defaultValue={rowData.points[0]} onBlur={(e)=>this.onBlurImageSize(e, 'width', rowData.id)} /></td>
                                   <td><input id={'height-is-' + rowData.id} type="number" defaultValue={rowData.points[1]} onBlur={(e)=>this.onBlurImageSize(e, 'height', rowData.id)} /></td>
                                   <td><select onChange={(e)=>this.onChangeList(e, rowData.id)} value={rowData.breakpoint ? rowData.breakpoint : ''}>{list}</select></td>
-                                  {this.props.calculationMode === 'calculation' ? <td><input type="text" onChange={(e)=>this.calcChange(e, rowData.id)} defaultValue={rowData.size} /></td> : null}
+                                  {this.props.calculationMode === 'calculation' ? <td><input type="text" onBlur={(e)=>this.calcChange(e, rowData.id)} defaultValue={rowData.size} /></td> : null}
                                   <td><button onClick={()=>this.props.callbacks.deleteImageSize(rowData.id)} className="button alert tooltip">x<span className="tooltiptext">Delete {rowData.points[0]} width Image Size</span></button></td>
                                 </tr>
       );
