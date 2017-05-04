@@ -18,16 +18,11 @@ export default class SystemTable extends Component {
 
   onBlurBreakpoint(property, index, e) {
     if(e.target.value.trim() !== '') {
-      if(property === 'name' && e.target.value !== e.target.defaultValue) {
-        document.getElementById('name-bp-' + index).defaultValue = e.target.value;
-        this.props.callbacks.breakpointUpdate(property, index, e.target.value);
-      }
-      if(property === 'width' && e.target.value !== e.target.defaultValue) {
-        document.getElementById('width-bp-' + index).defaultValue = e.target.value;
+      if(e.target.value !== e.target.defaultValue) {
         this.props.callbacks.breakpointUpdate(property, index, e.target.value);
       }
     } else {
-      document.getElementById('name-bp-' + index).setAttribute('value', e.target.value);
+      e.target.value = e.target.defaultValue;
     }
   }
 
@@ -36,12 +31,23 @@ export default class SystemTable extends Component {
     let name = document.getElementById('add-bp-name').value;
     let width = document.getElementById('add-bp-width').value;
     //check if name is blank and width is greater than 0
-    if(name.trim() !== '' &&  width > 0 ) {
-      this.props.callbacks.addBreakpoint(name, width);
+    if(name.trim() !== '' &&  width > 0) {
+      let breakpointDuplicated = false;
+
+      for(let i in this.props.breakpointList) {
+        if(this.props.breakpointList[i].toLowerCase() === name.toLowerCase()) {
+          breakpointDuplicated = true;
+        }
+      }
+
+      if(!breakpointDuplicated) {
+        this.props.callbacks.addBreakpoint(name, width);
+
+        //reset fields to nothing
+        document.getElementById('add-bp-name').value = '';
+        document.getElementById('add-bp-width').value = '';
+      }
     }
-    //reset fields to nothing
-    document.getElementById('add-bp-name').value = '';
-    document.getElementById('add-bp-width').value = '';
   }
 
   buildBreakpoints(tableValues) {
