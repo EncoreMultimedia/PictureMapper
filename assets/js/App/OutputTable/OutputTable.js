@@ -4,6 +4,10 @@ import cloneDeep from 'lodash/cloneDeep';
 
 
 export default class OutputTable extends Component{
+  /**
+   *
+   * @returns {XML}
+   */
   render() {
 
     const styleOptions = this.props.styleOptions.map((style)=>{
@@ -70,6 +74,10 @@ export default class OutputTable extends Component{
   }
 }
 
+/**
+ *
+ * @type {{breakpoints: *, multipliers: *, styleOptions: *, breakpointStyleChange: shim, imageStyleShown: shim}}
+ */
 OutputTable.propTypes = {
   breakpoints: PropTypes.arrayOf(PropTypes.object),
   multipliers: PropTypes.arrayOf(PropTypes.object),
