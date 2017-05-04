@@ -33,6 +33,7 @@ export default class App extends Component {
     this.setImageSizes();
   }
 
+  //updates the breakpoint using the breakpoint handler class
   breakpointUpdate(property, index, value) {
     if(property === 'name') {
       this.setState({
@@ -48,6 +49,7 @@ export default class App extends Component {
     }
   }
 
+  //add a breakpoint using the breakpoint handler class
   addBreakpoint(name, width) {
     this.setState(
       {
@@ -59,35 +61,59 @@ export default class App extends Component {
 
   }
 
-  deleteBreakpoint(id) {
-    let breakpoints = this.state.breakpoints;
+  //delete a breakpoint using the breakpoint handler class
+  deleteBreakpoint(index) {
     let imageSizes = this.state.imageSizes;
-    for(let i = 1; i < breakpoints.length; i++) {
-      if(parseInt(id) === parseInt(breakpoints[i].id)) {
 
+    let lowerName =  this.breakpointsHandler.getBreakpoint(index).name.toLowerCase();
+    let newLastLowerName;
 
-        let lowerName = breakpoints[i].name.toLowerCase();
-        let newLastLowerName;
+    if(typeof  this.breakpointsHandler.breakpoints[index + 1] === 'undefined') {
+      newLastLowerName = this.breakpointsHandler.getBreakpoint(index).name.toLowerCase();
+    }
 
-        // If we're deleting the last breakpoint in the list
-        if(typeof breakpoints[i+1] == 'undefined') {
-          // Grab the "new" last breakpoint name
-          newLastLowerName = breakpoints[i-1].name.toLowerCase();
-        }
-
-        // Change image styles to default if they are using this breakpoint or
-        // the previous breakpoint if we're deleting the last in the list
-        for(let j = 1; j < imageSizes.length; j++) {
-          if(imageSizes[j].breakpoint == lowerName || imageSizes[j].breakpoint == newLastLowerName) {
-            console.log(imageSizes[j]);
-            imageSizes[j].breakpoint = 'default';
-          }
-        }
-
-        breakpoints.splice(i, 1);
-        this.setState({breakpoints: breakpoints, breakpointList: this.createBreakpointList(breakpoints), imageSizes: imageSizes});
+    // Change image styles to default if they are using this breakpoint or
+    // the previous breakpoint if we're deleting the last in the list
+    for(let image in imageSizes) {
+      if(imageSizes[image].breakpoint === lowerName || imageSizes[image].breakpoint === newLastLowerName) {
+        imageSizes[image].breakpoint = 'default';
       }
     }
+
+    this.setState(
+      {
+        breakpoints: this.breakpointsHandler.deleteBreakpoint(index).breakpoints,
+        breakpointList: this.createBreakpointList(this.breakpointsHandler.breakpoints),
+        imageSizes: imageSizes,
+      }
+    );
+
+    // for(let i = 1; i < this.breakpointsHandler.breakpoints.length; i++) {
+    //   if(parseInt(id) === parseInt(this.breakpointsHandler.breakpoints[i].id)) {
+    //
+    //
+    //     let lowerName = breakpoints[i].name.toLowerCase();
+    //     let newLastLowerName;
+    //
+    //     // If we're deleting the last breakpoint in the list
+    //     if(typeof breakpoints[i+1] == 'undefined') {
+    //       // Grab the "new" last breakpoint name
+    //       newLastLowerName = breakpoints[i-1].name.toLowerCase();
+    //     }
+    //
+    //     // Change image styles to default if they are using this breakpoint or
+    //     // the previous breakpoint if we're deleting the last in the list
+    //     for(let j = 1; j < imageSizes.length; j++) {
+    //       if(imageSizes[j].breakpoint == lowerName || imageSizes[j].breakpoint == newLastLowerName) {
+    //         console.log(imageSizes[j]);
+    //         imageSizes[j].breakpoint = 'default';
+    //       }
+    //     }
+    //
+    //     // breakpoints.splice(i, 1);
+    //     // this.setState({breakpoints: breakpoints, breakpointList: this.createBreakpointList(breakpoints), imageSizes: imageSizes});
+    //   }
+    // }
   }
 
   imageSizeUpdate(value, property, imageSizeId) {

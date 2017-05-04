@@ -60,7 +60,7 @@ export default class SystemTable extends Component {
                                   <td>
                                     <input id={'width-bp-' + index} type="number" onBlur={(e)=>this.onBlurBreakpoint('width', index, e)} defaultValue={parseInt(rowData.width, 10)} disabled={disabled} />
                                   </td>
-                                  <td><button onClick={()=>this.props.callbacks.deleteBreakpoint(rowData.id)} className="button alert tooltip" disabled={removeDisabled}>x<span className="tooltiptext">Delete {rowData.name} Breakpoint</span></button></td>
+                                  <td><button onClick={()=>this.props.callbacks.deleteBreakpoint(index)} className="button alert tooltip" disabled={removeDisabled}>x<span className="tooltiptext">Delete {rowData.name} Breakpoint</span></button></td>
                                 </tr>
       );
     });

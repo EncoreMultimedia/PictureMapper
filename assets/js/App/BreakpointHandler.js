@@ -16,8 +16,9 @@ export default class BreakpointHandler {
   }
 
   //remove Breakpoint using index
-  removeBreakpoint(index) {
+  deleteBreakpoint(index) {
     this._breakpoints.splice(index, 1);
+    return this;
   }
 
   //get breakpoint
