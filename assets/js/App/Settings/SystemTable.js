@@ -175,13 +175,13 @@ export default class SystemTable extends Component {
     this.props.callbacks.breakpointChange(rowDataID, e.target.value);
   }
 
-  onChangeMultiplier(e, property, id ) {
+  onChangeMultiplier(e, property, index ) {
     if(e.target.value.trim() !== '') {
       if(property === 'name' && e.target.value !== e.target.defaultValue) {
-        this.props.callbacks.multiplierUpdate(e.target.value, property, id);
+        this.props.callbacks.multiplierUpdate(property, index, e.target.value);
       }
       if(property === 'value' && e.target.value !== e.target.defaultValue) {
-        this.props.callbacks.multiplierUpdate(e.target.value, property, id);
+        this.props.callbacks.multiplierUpdate(property, index, e.target.value);
       }
     }
   }
@@ -190,12 +190,12 @@ export default class SystemTable extends Component {
     // add the table headings
     const tableHeadings = <tr><th>Resolution</th><th>Multiplier</th></tr>;
     // create the table body, if row.data == header then don't return the headings object.
-    const tableBody = this.props.tableValue.map((rowData) => {
+    const tableBody = this.props.tableValue.map((rowData, index) => {
       return (
         rowData.header ? null : <tr key={rowData.id}>
-                                  <td><input id={'multi-name-'+rowData.id} type="text" onBlur={(e)=>this.onChangeMultiplier(e, 'name', rowData.id)} defaultValue={rowData.name}/></td>
-                                  <td><input id={'multi-value-'+rowData.id} type="number" onBlur={(e)=>this.onChangeMultiplier(e, 'value', rowData.id)} defaultValue={rowData.value}/></td>
-                                  <td><button onClick={()=>this.props.callbacks.deleteMultiplier(rowData.id)} className="button alert tooltip">x<span className="tooltiptext">Delete {rowData.name} Multiplier</span></button></td>
+                                  <td><input id={'multi-name-'+rowData.id} type="text" onBlur={(e)=>this.onChangeMultiplier(e, 'name', index)} defaultValue={rowData.name}/></td>
+                                  <td><input id={'multi-value-'+rowData.id} type="number" onBlur={(e)=>this.onChangeMultiplier(e, 'value', index)} defaultValue={rowData.value}/></td>
+                                  <td><button onClick={()=>this.props.callbacks.deleteMultiplier(index)} className="button alert tooltip">x<span className="tooltiptext">Delete {rowData.name} Multiplier</span></button></td>
                                 </tr>
       );
     });

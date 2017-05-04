@@ -149,16 +149,14 @@ export default class App extends Component {
     });
   }
 
-  multiplierUpdate(value, changedInput, id) {
+  multiplierUpdate(property,index, value) {
     let multipliers = this.state.multipliers;
 
-    for(let i = 1; i < multipliers.length; i++) {
-      if(changedInput === 'name' && parseInt(id, 10) === parseInt(multipliers[i].id)) {
-        multipliers[i].name = value;
-      }
-      if(changedInput === 'value' && parseInt(id, 10) === parseInt(multipliers[i].id)) {
-        multipliers[i].value = value;
-      }
+    if(property === 'name' && parseInt(index, 10) === parseInt(multipliers[i].id)) {
+      multipliers[i].name = value;
+    }
+    if(property === 'value' && parseInt(index, 10) === parseInt(multipliers[i].id)) {
+      multipliers[i].value = value;
     }
 
     this.setState({multipliers: multipliers});
