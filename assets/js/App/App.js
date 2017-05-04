@@ -2,14 +2,17 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Settings from './Settings/Settings';
 import OutputTable from './OutputTable/OutputTable';
-
+import BreakpointHandler from './BreakpointHandler';
 
 export default class App extends Component {
 
   constructor(props) {
     super(props);
+
+    this.breakpointsHandler =  new BreakpointHandler(this.props.breakpoints);
+
     this.state = {
-      breakpoints:  this.props.breakpoints,
+      breakpoints: this.breakpointsHandler.breakpoints,
       breakpointCounter: this.props.breakpoints.length - 1,
       imageSizes:   this.props.imageSizes,
       imageSizesCounter: this.props.imageSizes.length - 1,
@@ -22,44 +25,34 @@ export default class App extends Component {
         imageExport: null,
       },
     };
+
     console.log('%c    Presented By: EncoreMultimedia.com   ', 'background: #fff; color: #0278ff  ');
+    console.log(this.props.breakpoints , this.breakpointsHandler.breakpoints);
   }
 
   componentDidMount() {
-    this.setImageSizes();
+    //this.setImageSizes();
   }
+  breakpointUpdate(value, property, id) {
 
-  //sort from least to greatest
-  sortImagePoints(points) {
-    return points.sort(function(a,b) {
-      return a[0] - b[0];
-    });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-
-  }
-
-  breakpointUpdate(value, changedElement, breakpoint) {
-
-    let breakpoints = this.state.breakpoints;
-
-    for(let i = 1; i < breakpoints.length; i++) {
-      if(changedElement === 'name' && parseInt(breakpoints[i].id) === parseInt(breakpoint)) {
-        breakpoints[i].name = value.target.value;
-      }
-      if(changedElement === 'width' && parseInt(breakpoints[i].id) === parseInt(breakpoint)) {
-        breakpoints[i].width = parseInt(value.target.value);
-      }
+    if(property === 'name') {
+      let jelly = this.breakpointsHandler.updateName(id, value);
+      this.setState({
+        breakpoints: jelly,
+      });
+      // this.setState({
+      //
+      //   //breakpointList: this.createBreakpointList(this.state.breakpoints.breakpoints),
+      // });
     }
-
-    if(changedElement === 'width') {
-      breakpoints = this.sortByWidth(breakpoints);
-      this.setState({breakpoints: breakpoints});
-      this.setImageSizes();
-    } else {
-      this.setState({breakpoints: breakpoints, breakpointList: this.createBreakpointList(breakpoints)});
-    }
+    // if(property === 'width') {
+    //   this.setState({
+    //     breakpoints: this.state.breakpoints.updateWidth(id, value),
+    //   });
+    //   //this.setImageSizes();
+    // }
+    console.log('after');
+    console.log(this.props.breakpoints, this.state.breakpoints);
   }
 
   addBreakpoint(name, width) {
@@ -111,20 +104,20 @@ export default class App extends Component {
     }
   }
 
-  imageSizeUpdate(value, changedElement, imageSizeId) {
+  imageSizeUpdate(value, property, imageSizeId) {
     let imageSizes = this.state.imageSizes;
 
     for(let i = 1; i < imageSizes.length; i++) {
-      if(changedElement === 'width' && imageSizes[i].id === imageSizeId) {
+      if(property === 'width' && imageSizes[i].id === imageSizeId) {
         imageSizes[i].points[0] = parseInt(value.target.value);
       }
 
-      if(changedElement === 'height' && imageSizes[i].id === imageSizeId) {
+      if(property === 'height' && imageSizes[i].id === imageSizeId) {
         imageSizes[i].points[1] = parseInt(value.target.value);
       }
     }
 
-    if(changedElement === 'width') {
+    if(property === 'width') {
       imageSizes = this.sortByImageWidth(imageSizes);
     }
 
