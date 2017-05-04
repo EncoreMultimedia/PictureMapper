@@ -49,10 +49,14 @@ export default class App extends Component {
   }
 
   addBreakpoint(name, width) {
+    this.setState(
+      {
+        breakpoints: this.sortByWidth(this.breakpointsHandler.addBreakpoint(name, width).breakpoints),
+        breakpointList: this.createBreakpointList(this.breakpointsHandler.breakpoints),
+      },
+      this.setImageSizes()
+    );
 
-    breakpoints = this.sortByWidth(breakpoints);
-    this.setState({breakpoints: this.breakpointsHandler.addBreakpoint(name, width), breakpointList: this.createBreakpointList(breakpoints)});
-    this.setImageSizes();
   }
 
   deleteBreakpoint(id) {

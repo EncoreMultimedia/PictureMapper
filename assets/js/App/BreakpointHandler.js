@@ -2,7 +2,7 @@
 export default class BreakpointHandler {
   constructor(breakpoints) {
     this._breakpoints = breakpoints;
-    this.counter = 0;
+    this.counter = breakpoints.length;
   }
 
   // get breakpoint list
@@ -27,6 +27,7 @@ export default class BreakpointHandler {
 
   //add breakpoint to the breakpoint list
   addBreakpoint(name, width) {
+    //add breakpoint to list
     this._breakpoints.push({
       id: this.counter,
       name: name,
@@ -37,6 +38,9 @@ export default class BreakpointHandler {
       },
       style: 'focal_point_scale_and_crop',
     });
+
+    // increment the counter
+    this.counter++;
 
     return this;
   }
