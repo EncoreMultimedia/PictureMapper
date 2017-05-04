@@ -4,24 +4,26 @@ import Settings from './Settings/Settings';
 import OutputTable from './OutputTable/OutputTable';
 import BreakpointHandler from './Handlers/BreakpointHandler';
 import MultipliersHandler from './Handlers/MultipliersHandler';
+import ImageSizeHandler from './Handlers/ImageSizeHandler';
 
 export default class App extends Component {
-
+  /**
+   *
+   * @param props
+   */
   constructor(props) {
     super(props);
-
     this.breakpointsHandler =  new BreakpointHandler(this.props.breakpoints);
     this.multiplierHandler = new MultipliersHandler(this.props.multipliers);
+    this.imageSizeHandler = new ImageSizeHandler(this.props.imageSizes);
+
     // Set Image Sizes
     this.breakpointsHandler.setImageSizes(this.props.imageSizes, 'percentage');
 
     this.state = {
       breakpoints: this.breakpointsHandler.breakpoints,
-      breakpointCounter: this.props.breakpoints.length - 1,
       imageSizes: this.props.imageSizes,
-      imageSizesCounter: this.props.imageSizes.length - 1,
       multipliers: this.props.multipliers,
-      multipliersCounter: this.props.multipliers.length - 1,
       breakpointList: this.createBreakpointList(this.props.breakpoints),
       calculationMode: 'percentage',
       imageStyleShown: false,
@@ -33,6 +35,12 @@ export default class App extends Component {
     console.log('%c    Presented By: EncoreMultimedia.com   ', 'background: #fff; color: #0278ff  ');
   }
 
+  /**
+   *
+   * @param property
+   * @param index
+   * @param value
+   */
   //updates the breakpoint using the breakpoint handler class
   breakpointUpdate(property, index, value) {
     if(property === 'name') {
@@ -48,6 +56,11 @@ export default class App extends Component {
     }
   }
 
+  /**
+   *
+   * @param name
+   * @param width
+   */
   //add a breakpoint using the breakpoint handler class
   addBreakpoint(name, width) {
     this.setState((prevState) => {
@@ -58,6 +71,10 @@ export default class App extends Component {
     });
   }
 
+  /**
+   *
+   * @param index
+   */
   //delete a breakpoint using the breakpoint handler class
   deleteBreakpoint(index) {
     this.setState((prevState) => {
@@ -86,70 +103,74 @@ export default class App extends Component {
     });
   }
 
+  /**
+   *
+   * @param index
+   * @param value
+   */
   onChangeBreakpointImageStyle(index, value) {
     this.setState({breakpoints: this.breakpointsHandler.updateStyleOption(index, value).breakpoints});
+
   }
 
-  imageSizeUpdate(value, property, imageSizeId) {
-    this.setState((prevState) => {
-      let imageSizes = prevState.imageSizes;
-      //add new object
-      for(let i = 1; i < imageSizes.length; i++) {
-        if(property === 'width' && imageSizes[i].id === imageSizeId) {
-          imageSizes[i].points[0] = parseInt(value.target.value);
-        }
+  /**
+   *
+   * @param property
+   * @param index
+   * @param value
+   */
+  imageSizeUpdate(property, index, value) {
 
-        if(property === 'height' && imageSizes[i].id === imageSizeId) {
-          imageSizes[i].points[1] = parseInt(value.target.value);
-        }
-      }
+    if(property === 'width') {
+      this.setState((prevState) => {
+        return{
+          imageSizes: this.imageSizeHandler.updateWidth(index, value).imageSizes,
+          breakpoints: this.breakpointsHandler.setImageSizes(prevState.imageSizes, prevState.calculationMode).breakpoints};
+      });
+    }
 
-      if(property === 'width') {
-        imageSizes = this.sortByImageWidth(imageSizes);
-      }
-
-      return {
-        imageSizes: imageSizes,
-        breakpoints: this.breakpointsHandler.setImageSizes(imageSizes, prevState.calculationMode).breakpoints,
-      };
-    });
+    if(property === 'height') {
+      this.setState((prevState) => {
+        return{
+          imageSizes: this.imageSizeHandler.updateHeight(index, value).imageSizes,
+          breakpoints: this.breakpointsHandler.setImageSizes(prevState.imageSizes, prevState.calculationMode).breakpoints};
+      });
+    }
   }
 
+  /**
+   *
+   * @param width
+   * @param height
+   */
   addImageSize(width, height) {
     this.setState((prevState) => {
-      let imageSizes = prevState.imageSizes;
-      //add new object
-      imageSizes.push({
-        id: prevState.imageSizesCounter,
-        points: [width,height],
-        breakpoint: this.breakpointsHandler.getBreakpoint(0).name,
-        size: '100vw',
-      });
-
       return {
-        imageSizes: imageSizes,
-        imageSizesCounter: prevState.imageSizesCounter + 1,
-        breakpoints: this.breakpointsHandler.setImageSizes(imageSizes, prevState.calculationMode).breakpoints,
+        imageSizes: this.imageSizeHandler.addImageSize(width, height).imageSizes,
+        breakpoints: this.breakpointsHandler.setImageSizes(this.imageSizeHandler.imageSizes, prevState.calculationMode).breakpoints,
       };
     });
   }
 
-  deleteImageSize(id) {
+  /**
+   *
+   * @param index
+   */
+  deleteImageSize(index) {
     this.setState((prevState) => {
-      let imageSizes = prevState.imageSizes;
-      for(let i = 1; i < imageSizes.length; i++) {
-        if(parseInt(id) === parseInt(imageSizes[i].id)) {
-          imageSizes.splice(i, 1);
-        }
-      }
-
       return {
-        imageSizes: imageSizes,
-        breakpoints: this.breakpointsHandler.setImageSizes(imageSizes, prevState.calculationMode).breakpoints,
+        imageSizes: this.imageSizeHandler.deleteImageSize(index).imageSizes,
+        breakpoints: this.breakpointsHandler.setImageSizes(this.imageSizeHandler.imageSizes, prevState.calculationMode).breakpoints,
       };
     });
   }
 
+  /**
+   *
+   * @param property
+   * @param index
+   * @param value
+   */
   multiplierUpdate(property,index, value) {
 
     if(property === 'name') {
@@ -166,21 +187,28 @@ export default class App extends Component {
     }
   }
 
+  /**
+   *
+   * @param resolution
+   * @param multiplier
+   */
   addMultiplier(resolution, multiplier) {
     this.setState({multipliers: this.multiplierHandler.addMultiplier(resolution, multiplier).multipliers});
   }
 
+  /**
+   *
+   * @param index
+   */
   deleteMultiplier(index) {
     this.setState({multipliers: this.multiplierHandler.deleteMultiplier(index).multipliers});
   }
 
-  sortByImageWidth(arr) {
-    arr.sort((a,b)=>{
-      return parseInt(a.points[0]) - parseInt(b.points[0]);
-    });
-    return arr;
-  }
-
+  /**
+   *
+   * @param breakpoints
+   * @returns {Array}
+   */
   createBreakpointList(breakpoints) {
     let breakpointList = [];
     //Push breakpoint name onto breakpointList
@@ -190,6 +218,10 @@ export default class App extends Component {
     return breakpointList;
   }
 
+  /**
+   *
+   * @param mode
+   */
   onChangeCalculationMode(mode) {
     this.setState((prevState) => {
       return {
@@ -199,6 +231,11 @@ export default class App extends Component {
     });
   }
 
+  /**
+   *
+   * @param id
+   * @param value
+   */
   onChangeImageSelectBreakpoint (id, value) {
     this.setState((prevState) => {
       let imageSizes = prevState.imageSizes;
@@ -215,6 +252,11 @@ export default class App extends Component {
     });
   }
 
+  /**
+   *
+   * @param id
+   * @param value
+   */
   onChangeCalculation(id, value) {
     this.setState((prevState) => {
       let imageSizes = prevState.imageSizes;
@@ -227,10 +269,17 @@ export default class App extends Component {
     });
   }
 
+  /**
+   *
+   * @param value
+   */
   onChangeImageStyleShown(value) {
     this.setState({imageStyleShown: value});
   }
 
+  /**
+   *
+   */
   exportCSV() {
     let breakpoints = this.state.breakpoints;
     let multipliers = this.state.multipliers;
@@ -259,6 +308,11 @@ export default class App extends Component {
     link.click();
   }
 
+  /**
+   *
+   * @param file
+   * @param focalPoint
+   */
   uploadImage(file, focalPoint) {
     let data = new FormData();
     data.append('image', file);
@@ -306,6 +360,10 @@ export default class App extends Component {
     this.setState({downloads: downloads});
   }
 
+  /**
+   *
+   * @returns {XML}
+   */
   render() {
     return (
       <article id="main" className="main">
@@ -346,7 +404,10 @@ export default class App extends Component {
     );
   }
 }
-
+/**
+ *
+ * @type {{breakpoints: *, imageSizes: *, multipliers: *}}
+ */
 App.propTypes = {
   breakpoints: PropTypes.arrayOf(PropTypes.object),
   imageSizes: PropTypes.arrayOf(PropTypes.object),

@@ -88,11 +88,13 @@ export default class SystemTable extends Component {
     );
   }
 
-  onBlurImageSize(e, property, id) {
+  onBlurImageSize(property, index, e) {
     if(e.target.value.trim() !== '') {
       if(e.target.value !== e.target.defaultValue) {
-        this.props.callbacks.imageSizeUpdate(e, property, id);
+        this.props.callbacks.imageSizeUpdate(property, index, e.target.value);
       }
+    }else {
+      e.target.value = e.target.defaultValue;
     }
   }
 
@@ -111,14 +113,14 @@ export default class SystemTable extends Component {
     breakpointList.splice(-1, 1);
 
     // create the table body, if row.data == header then don't return the headings object.
-    const tableBody = this.props.tableValue.map((rowData) => {
+    const tableBody = this.props.tableValue.map((rowData, index) => {
       const list = breakpointList.map((value) => {
         return <option key={value + 'select-list'} value={value.toLowerCase()}>{value}</option>;
       });
       return (
         rowData.header ? null : <tr key={rowData.id + 'imageSizes'}>
-                                  <td><input id={'width-is-' + rowData.id} type="number" defaultValue={rowData.points[0]} onBlur={(e)=>this.onBlurImageSize(e, 'width', rowData.id)} /></td>
-                                  <td><input id={'height-is-' + rowData.id} type="number" defaultValue={rowData.points[1]} onBlur={(e)=>this.onBlurImageSize(e, 'height', rowData.id)} /></td>
+                                  <td><input id={'width-is-' + rowData.id} type="number" defaultValue={rowData.points[0]} onBlur={(e)=>this.onBlurImageSize('width', index, e)} /></td>
+                                  <td><input id={'height-is-' + rowData.id} type="number" defaultValue={rowData.points[1]} onBlur={(e)=>this.onBlurImageSize('height', index, e)} /></td>
                                   <td><select onChange={(e)=>this.onChangeList(e, rowData.id)} value={rowData.breakpoint ? rowData.breakpoint : ''}>{list}</select></td>
                                   {this.props.calculationMode === 'calculation' ? <td><input type="text" onBlur={(e)=>this.calcChange(e, rowData.id)} defaultValue={rowData.size} /></td> : null}
                                   <td><button onClick={()=>this.props.callbacks.deleteImageSize(rowData.id)} className="button alert tooltip">x<span className="tooltiptext">Delete {rowData.points[0]} width Image Size</span></button></td>
