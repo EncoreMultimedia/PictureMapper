@@ -69,7 +69,7 @@ export default class App extends Component {
     let newLastLowerName;
 
     if(typeof  this.breakpointsHandler.breakpoints[index + 1] === 'undefined') {
-      newLastLowerName = this.breakpointsHandler.getBreakpoint(index).name.toLowerCase();
+      newLastLowerName = this.breakpointsHandler.getBreakpoint(index-1).name.toLowerCase();
     }
 
     // Change image styles to default if they are using this breakpoint or
@@ -228,7 +228,7 @@ export default class App extends Component {
   createBreakpointList(breakpoints) {
     let breakpointList = [];
     //Push breakpoint name onto breakpointList
-    for(let i = 1; i < breakpoints.length; i++) {
+    for(let i = 0; i < breakpoints.length; i++) {
       breakpointList.push(breakpoints[i].name);
     }
     return breakpointList;

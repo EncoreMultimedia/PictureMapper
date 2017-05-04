@@ -51,7 +51,7 @@ export default class SystemTable extends Component {
 
     const tableBody = this.props.tableValue.map((rowData, index) => {
       const disabled = rowData.id == 0 ? true : false;
-      const removeDisabled = disabled || this.props.tableValue.length <= 3 ? true : false;
+      const removeDisabled = disabled || this.props.tableValue.length <= 2 ? true : false;
       return (
         rowData.header ? null : <tr key={rowData.id + 'breakpoint'}>
                                   <td>
