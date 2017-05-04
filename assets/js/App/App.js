@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Settings from './Settings/Settings';
 import OutputTable from './OutputTable/OutputTable';
-import BreakpointHandler from './BreakpointHandler';
+import BreakpointHandler from './handlers/BreakpointHandler';
 
 export default class App extends Component {
 
@@ -69,7 +69,7 @@ export default class App extends Component {
     let newLastLowerName;
 
     if(typeof  this.breakpointsHandler.breakpoints[index + 1] === 'undefined') {
-      newLastLowerName = this.breakpointsHandler.getBreakpoint(index-1).name.toLowerCase();
+      newLastLowerName = this.breakpointsHandler.getBreakpoint(index - 1).name.toLowerCase();
     }
 
     // Change image styles to default if they are using this breakpoint or
@@ -87,33 +87,6 @@ export default class App extends Component {
         imageSizes: imageSizes,
       }
     );
-
-    // for(let i = 1; i < this.breakpointsHandler.breakpoints.length; i++) {
-    //   if(parseInt(id) === parseInt(this.breakpointsHandler.breakpoints[i].id)) {
-    //
-    //
-    //     let lowerName = breakpoints[i].name.toLowerCase();
-    //     let newLastLowerName;
-    //
-    //     // If we're deleting the last breakpoint in the list
-    //     if(typeof breakpoints[i+1] == 'undefined') {
-    //       // Grab the "new" last breakpoint name
-    //       newLastLowerName = breakpoints[i-1].name.toLowerCase();
-    //     }
-    //
-    //     // Change image styles to default if they are using this breakpoint or
-    //     // the previous breakpoint if we're deleting the last in the list
-    //     for(let j = 1; j < imageSizes.length; j++) {
-    //       if(imageSizes[j].breakpoint == lowerName || imageSizes[j].breakpoint == newLastLowerName) {
-    //         console.log(imageSizes[j]);
-    //         imageSizes[j].breakpoint = 'default';
-    //       }
-    //     }
-    //
-    //     // breakpoints.splice(i, 1);
-    //     // this.setState({breakpoints: breakpoints, breakpointList: this.createBreakpointList(breakpoints), imageSizes: imageSizes});
-    //   }
-    // }
   }
 
   onChangeBreakpointImageStyle(index, value) {
