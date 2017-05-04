@@ -46,7 +46,7 @@ export default class SystemTable extends Component {
 
   buildBreakpoints(tableValues) {
     // add the table headings
-    const tableHeadings = <tr><th>{tableValues[0].header[1]}</th><th>{tableValues[0].header[2]}</th></tr>;
+    const tableHeadings = <tr><th>Name</th><th>Width</th></tr>;
     // create the table body, if row.data == header then don't return the headings object.
 
     const tableBody = this.props.tableValue.map((rowData) => {
@@ -99,8 +99,8 @@ export default class SystemTable extends Component {
     // add the table headings
     const tableHeadings = (
       <tr>
-        <th width={this.props.calculationMode === 'calculation' ? '100' : '120'} >{tableValues[0].header[2]}</th>
-        <th width={this.props.calculationMode === 'calculation' ? '100' : '120'}>{tableValues[0].header[3]}</th>
+        <th width={this.props.calculationMode === 'calculation' ? '100' : '120'} >Width</th>
+        <th width={this.props.calculationMode === 'calculation' ? '100' : '120'}>Height</th>
         <th width={this.props.calculationMode === 'calculation' ? '' : '200'}>Breakpoint</th>
         {this.props.calculationMode === 'calculation' ? <th>Calc</th> : null}
       </tr>
@@ -188,7 +188,7 @@ export default class SystemTable extends Component {
 
   buildMultipliers(tableValues) {
     // add the table headings
-    const tableHeadings = <tr><th>{tableValues[0].header[1]}</th><th>{tableValues[0].header[2]}</th></tr>;
+    const tableHeadings = <tr><th>Resolution</th><th>Multiplier</th></tr>;
     // create the table body, if row.data == header then don't return the headings object.
     const tableBody = this.props.tableValue.map((rowData) => {
       return (

@@ -7,9 +7,6 @@ import './sass/styles.scss';
 //Base breakpoints for default loading of pages.
 const breakpoints = [
   {
-    header: ['breakpoints','Name', 'Width'],
-  },
-  {
     id: 0,
     name: 'Default',
     width: 0,
@@ -94,9 +91,6 @@ const breakpoints = [
 // Base media queries for default settings
 const imageSizes = [
   {
-    header: ['imageSizes','ID', 'Width', 'Height'],
-  },
-  {
     id: 0,
     points: [320,181],
     breakpoint: 'yoda',
@@ -119,9 +113,6 @@ const imageSizes = [
 //Base multipliers for default settings
 const multipliers = [
   {
-    header: ['multipliers','Resolution', 'Multiplier'],
-  },
-  {
     id: 0,
     name: '2',
     value: 1.5,
@@ -131,7 +122,6 @@ const multipliers = [
     name: '2.5',
     value: 2,
   },
-
 ];
 
 //style Options is used for the image API in drupal. These are the base selections for default settings.
