@@ -121,7 +121,7 @@ export default class SystemTable extends Component {
         rowData.header ? null : <tr key={rowData.id + 'imageSizes'}>
                                   <td><input id={'width-is-' + rowData.id} type="number" defaultValue={rowData.points[0]} onBlur={(e)=>this.onBlurImageSize('width', index, e)} /></td>
                                   <td><input id={'height-is-' + rowData.id} type="number" defaultValue={rowData.points[1]} onBlur={(e)=>this.onBlurImageSize('height', index, e)} /></td>
-                                  <td><select onChange={(e)=>this.onChangeList(e, rowData.id)} value={rowData.breakpoint ? rowData.breakpoint : ''}>{list}</select></td>
+                                  <td><select onChange={(e)=>this.onChangeList(e, rowData.id)} defaultValue={rowData.breakpoint ? rowData.breakpoint : ''}>{list}</select></td>
                                   {this.props.calculationMode === 'calculation' ? <td><input type="text" onBlur={(e)=>this.calcChange(e, rowData.id)} defaultValue={rowData.size} /></td> : null}
                                   <td><button onClick={()=>this.props.callbacks.deleteImageSize(rowData.id)} className="button alert tooltip">x<span className="tooltiptext">Delete {rowData.points[0]} width Image Size</span></button></td>
                                 </tr>
