@@ -16,18 +16,18 @@ export default class SystemTable extends Component {
     }
   }
 
-  onBlurBreakpoint(e, property, id) {
+  onBlurBreakpoint(property, index, e) {
     if(e.target.value.trim() !== '') {
       if(property === 'name' && e.target.value !== e.target.defaultValue) {
-        document.getElementById('name-bp-' + id).defaultValue = e.target.value;
-        this.props.callbacks.breakpointUpdate(e, property, id);
+        document.getElementById('name-bp-' + index).defaultValue = e.target.value;
+        this.props.callbacks.breakpointUpdate(property, index, e.target.value);
       }
       if(property === 'width' && e.target.value !== e.target.defaultValue) {
-        document.getElementById('width-bp-' + id).defaultValue = e.target.value;
-        this.props.callbacks.breakpointUpdate(e, property, id);
+        document.getElementById('width-bp-' + index).defaultValue = e.target.value;
+        this.props.callbacks.breakpointUpdate(property, index, e.target.value);
       }
     } else {
-      document.getElementById('name-bp-' + id).setAttribute('value', e.target.value);
+      document.getElementById('name-bp-' + index).setAttribute('value', e.target.value);
     }
   }
 
@@ -49,16 +49,16 @@ export default class SystemTable extends Component {
     const tableHeadings = <tr><th>Name</th><th>Width</th></tr>;
     // create the table body, if row.data == header then don't return the headings object.
 
-    const tableBody = this.props.tableValue.map((rowData) => {
+    const tableBody = this.props.tableValue.map((rowData, index) => {
       const disabled = rowData.id == 0 ? true : false;
       const removeDisabled = disabled || this.props.tableValue.length <= 3 ? true : false;
       return (
         rowData.header ? null : <tr key={rowData.id + 'breakpoint'}>
                                   <td>
-                                    <input id={'name-bp-' + rowData.id} type="text" onBlur={(e)=>this.onBlurBreakpoint(e, 'name', rowData.id)}  defaultValue={rowData.name} disabled={disabled}/>
+                                    <input id={'name-bp-' + index} type="text" onBlur={(e)=>this.onBlurBreakpoint( 'name',index, e)}  defaultValue={rowData.name} disabled={disabled}/>
                                   </td>
                                   <td>
-                                    <input id={'width-bp-' + rowData.id} type="number" onBlur={(e)=>this.onBlurBreakpoint(e, 'width', rowData.id)} defaultValue={parseInt(rowData.width, 10)} disabled={disabled} />
+                                    <input id={'width-bp-' + index} type="number" onBlur={(e)=>this.onBlurBreakpoint('width', index, e)} defaultValue={parseInt(rowData.width, 10)} disabled={disabled} />
                                   </td>
                                   <td><button onClick={()=>this.props.callbacks.deleteBreakpoint(rowData.id)} className="button alert tooltip" disabled={removeDisabled}>x<span className="tooltiptext">Delete {rowData.name} Breakpoint</span></button></td>
                                 </tr>

@@ -2,6 +2,7 @@
 export default class BreakpointHandler {
   constructor(breakpoints) {
     this._breakpoints = breakpoints;
+    this.counter = 0;
   }
 
   // get breakpoint list
@@ -25,19 +26,30 @@ export default class BreakpointHandler {
   }
 
   //add breakpoint to the breakpoint list
-  addBreakpoint(breakpoint) {
-    this._breakpoints.push(breakpoint);
+  addBreakpoint(name, width) {
+    this._breakpoints.push({
+      id: this.counter,
+      name: name,
+      width: width,
+      image: {
+        width: 0,
+        height: 0,
+      },
+      style: 'focal_point_scale_and_crop',
+    });
+
+    return this;
   }
 
   updateName(index, name) {
-    console.log('hello');
     this._breakpoints[index].name = name;
-    return this._breakpoints;
+    return this;
   }
 
   //updateWidth
   updateWidth(index, width) {
     this._breakpoints[index].width = width;
+    return this;
   }
 
   //updateImageWidth

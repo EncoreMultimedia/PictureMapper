@@ -27,49 +27,31 @@ export default class App extends Component {
     };
 
     console.log('%c    Presented By: EncoreMultimedia.com   ', 'background: #fff; color: #0278ff  ');
-    console.log(this.props.breakpoints , this.breakpointsHandler.breakpoints);
   }
 
   componentDidMount() {
-    //this.setImageSizes();
+    this.setImageSizes();
   }
-  breakpointUpdate(value, property, id) {
 
+  breakpointUpdate(property, index, value) {
     if(property === 'name') {
-      let jelly = this.breakpointsHandler.updateName(id, value);
       this.setState({
-        breakpoints: jelly,
+        breakpoints: this.breakpointsHandler.updateName(index, value).breakpoints,
+        breakpointList: this.createBreakpointList(this.breakpointsHandler.breakpoints),
       });
-      // this.setState({
-      //
-      //   //breakpointList: this.createBreakpointList(this.state.breakpoints.breakpoints),
-      // });
     }
-    // if(property === 'width') {
-    //   this.setState({
-    //     breakpoints: this.state.breakpoints.updateWidth(id, value),
-    //   });
-    //   //this.setImageSizes();
-    // }
-    console.log('after');
-    console.log(this.props.breakpoints, this.state.breakpoints);
+    if(property === 'width') {
+      this.setState(
+        {breakpoints: this.sortByWidth(this.breakpointsHandler.updateWidth(index, value).breakpoints)},
+        ()=>this.setImageSizes()
+      );
+    }
   }
 
   addBreakpoint(name, width) {
-    let breakpoints = this.state.breakpoints;
-    //add new object
-    breakpoints.push({
-      id: this.state.breakpointCounter,
-      name: name,
-      width: width,
-      image: {
-        width: 0,
-        height: 0,
-      },
-      style: 'focal_point_scale_and_crop',
-    });
+
     breakpoints = this.sortByWidth(breakpoints);
-    this.setState({breakpoints: breakpoints,breakpointCounter: this.state.breakpointCounter + 1, breakpointList: this.createBreakpointList(breakpoints)});
+    this.setState({breakpoints: this.breakpointsHandler.addBreakpoint(name, width), breakpointList: this.createBreakpointList(breakpoints)});
     this.setImageSizes();
   }
 
@@ -309,7 +291,7 @@ export default class App extends Component {
         let j = 0;
 
         let stopBreakpoint = stopPoints[i + 1];
-        if(typeof stopBreakpoint == 'undefined')
+        if(typeof stopBreakpoint === 'undefined')
           stopBreakpoint = breakpoints.length-1;
 
         while(j !== stopBreakpoint) {
@@ -353,7 +335,6 @@ export default class App extends Component {
           }
 
           breakpoints[j].image.height = this.calculateImageHeightLinear(imageSizes[i].points[0] / imageSizes[i].points[1], breakpoints[j].image.width);
-
           j++;
 
         }
