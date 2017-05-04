@@ -220,9 +220,10 @@ export default class BreakpointHandler {
             this.updateImageWidth(j, this._calculateImageWidthByCalc(this.getBreakpoint(j+1).width, imageSizes[i].size));
           }
 
-          this.updateImageHeight(j, this._calculateImageHeightLinear(imageSizes[i].points[0] / imageSizes[i].points[1], this.getBreakpoint(j).image.width));
-          j++;
+          //this.updateImageHeight(j, this._calculateImageHeightLinear(imageSizes[i].points[0] / imageSizes[i].points[1], this.getBreakpoint(j).image.width));
+          this.updateImageHeight(j, this._calculateImageHeightBySlope(imageSizes[i].points, imageSizes[i+1].points, this.getBreakpoint(j).image.width));
 
+          j++;
         }
       }
     }
@@ -257,16 +258,17 @@ export default class BreakpointHandler {
     return eval(size_equation);
   }
 
-  /**
-   *
-   * @param aspectRatio
-   * @param width
-   * @returns {number}
-   * @private
-   */
-  //get the height to the lowest whole number.
+  // Get the height to the lowest whole number.
+  // Image maintains aspect ratio
   _calculateImageHeightLinear(aspectRatio, width){
     return Math.floor(width / aspectRatio);
+  }
+
+  _calculateImageHeightBySlope(lowerPoints, upperPoints, width) {
+    let slope = (upperPoints[1]-lowerPoints[1])/(upperPoints[0]-lowerPoints[0]);
+    let height = (upperPoints[1] - slope*(upperPoints[0]-width));
+
+    return Math.floor(height);
   }
 
   /**
